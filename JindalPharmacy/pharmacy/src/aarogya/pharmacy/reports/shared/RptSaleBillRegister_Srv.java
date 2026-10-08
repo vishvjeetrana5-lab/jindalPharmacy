@@ -1,0 +1,49 @@
+package aarogya.pharmacy.reports.shared;
+
+import com.google.gwt.user.client.rpc.RemoteService;
+import dataman.dmBase.self.shared.*;
+import dataman.dmBase.self.shared.FieldUDT_Mdl;
+import dataman.dmToolkit.self.shared.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+public interface RptSaleBillRegister_Srv extends RemoteService {
+
+    public DmResult<KeyFieldExtended> execute(String sessionId, String widgetName, LinkedHashMap<String, FieldUDT_Mdl> filter, DmReportProperty_Mdl reportProperty, String category, String recIdPrefixFrom, String vNoFrom, String recIdPrefixTo, String vNoTo);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHType(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHDepartment(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHConsultant(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<TxtHSaleBillNo_Mdl>> getTxtHBillNo(String category, String siteCode, DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHMedicineName(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHMedicineCat(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHSubCategory(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHMedicineGroup(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHSite(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHValueType(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHOperation(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHResGroup(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHBillType(String category, DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResult<KeyFieldExtended> getDefaultValue();
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHReportType(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<TxtHLMCode_Mdl>> getTxtHLMCode(String type, DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getOrganization(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getpaymentSource(DmHelper helper, boolean blnToEndOfFile);
+}

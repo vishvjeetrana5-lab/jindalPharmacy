@@ -1,0 +1,734 @@
+.dm-FlwForm-Login{    
+    box-shadow: -5px 5px 10px -10px black !important;
+    /*position: absolute !important;*/
+    /*    top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%,-50%) !important;*/
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    background: white;
+}
+.dm-Login-container{
+    background-color: rgb(255, 255, 255);
+    height: 423px;
+    border-top: 3px solid rgb(1, 150, 135) !important;
+    box-shadow: 0px 2px 9px 0px #222 !important;
+}
+
+.dm-Login-container .dm-Login-style{
+    float: right;
+    width: 33.33%;
+    padding: 41px 0px;
+}
+.dm-bg-banner{
+    float:left;
+    width: 66.67%;
+    background-image: url("../../images/1.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.dm-company-banner{
+    float:left;
+    width: 50%;
+    background-image: url("../../images/1.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.dm-company-list{
+    float: right;
+    width: 50%;
+}
+
+.dm-User-Heading{
+    background-image: url("../../images/user.png");
+    width: 65px;
+    height: 65px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    margin: auto;
+    margin-bottom: 0px;
+}
+
+.dm-Login-Heading {
+    font-size: 18px;
+    font-family: Arial;
+    background: #009688;
+    color: white;
+    box-shadow: 0 3px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.dm-Login-LblHeading{
+    padding-top: 8px;
+    text-align: center;
+}
+
+.dm-Login-TextBox {
+    position: relative;
+    border-width: medium medium 1px;
+    border-style: none none solid;
+    border-color: #555;
+    -moz-border-top-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    border-image: none;
+    transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1) 0s;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, red 4%) no-repeat scroll -350px 0px / 100% 100% transparent;
+    margin: 25px 0px 25px;
+    margin-bottom: 35px;
+}
+
+.dm-next-button-style {
+    width: 81%;
+    float: left;
+    border: medium none;
+    box-shadow: 0px 1px 3px 0px rgb(43, 43, 43) !important;
+    transform: scale(1);
+    transition: all 0.3s ease-in 0s;
+    border-radius: 20px 20px 20px 20px !important;
+    outline: medium none !important;
+    margin-top: 16px;
+    padding: 6px 10px !important;
+    margin-left: 9% !important;
+    font-weight: bold;
+}
+.dm-lock-button-style {
+    float: left;
+    border: medium none;
+    box-shadow: 0px 1px 3px 0px rgb(43, 43, 43) !important;
+    transform: scale(1);
+    transition: all 0.3s ease-in 0s;
+    border-radius: 4px 4px 4px 4px !important;
+    outline: medium none !important;
+    margin-top: 16px;
+    padding: 6px 10px !important;
+    margin-left: 9% !important;
+    font-weight: bold;
+}
+
+.dm-next-button-financial {
+    width: 35%;
+    float: right;
+    border: medium none;
+    box-shadow: 0px 1px 3px 0px rgb(43, 43, 43) !important;
+    transform: scale(1);
+    transition: all 0.3s ease-in 0s;
+    border-radius: 3px 3px 3px 3px !important;
+    outline: medium none !important;
+    margin-top: 10px;
+    padding: 6px 10px !important;
+    margin-right: 5% !important;
+    font-weight: bold;
+}
+.dm-pre-button-financial {
+    width: 35%;
+    float: left;
+    border: medium none;
+    box-shadow: 0px 1px 3px 0px rgb(43, 43, 43) !important;
+    transform: scale(1);
+    transition: all 0.3s ease-in 0s;
+    border-radius: 3px 3px 3px 3px !important;
+    outline: medium none !important;
+    margin-top: 10px;
+    padding: 6px 10px !important;
+    margin-left: 5% !important;
+    font-weight: bold;
+}
+
+.dm-financial-table > div{
+    height:313px !important;
+    background-color: #fff;
+    border: 1px solid rgb(0, 150, 136) !important;
+    border-bottom: none !important;
+    border-right: none !important;
+    border-left: none !important;
+}
+
+.dm-padding30px{
+    padding:30px;
+}
+
+.next-color {
+    background-color: #009688 !important;
+}
+
+.dm-Lock-Glass {
+    opacity: 0.7;
+}
+
+.dm-Login-Button {
+    position: relative;
+    /*    z-index: 1000;*/
+    /*height: 30px;*/
+    margin-left: 7px;
+    margin-right: 2px;
+    font-size: 14px;
+    border: none;
+    background: rgb(76, 158, 217);
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 6px;  
+    color: white;    
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dm-Login-Button-Disable {
+    position: relative;
+    height: 30px;
+    margin-left: 7px;
+    margin-right: 2px;
+    font-size: 16px;
+    border: none;
+    background: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 6px;
+    width: 48%;
+    color: white;     
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.GIOUNI1CF3{
+    background: rgb(81, 99, 149) !important;
+    color:#fff !important;
+    font-weight: bold !important;
+} 
+
+.divRightHeader:hover .notification
+{
+    color:#7d7d7d !important;    
+}
+.divRightHeader:hover .flag
+{
+    color:#7d7d7d !important;    
+}
+.divRightHeader:hover .SettingImage
+{
+    color:#7d7d7d !important;    
+}
+
+.divRightHeader:hover .notificationCount
+{
+    color:white !important;    
+}
+
+.divRightHeader:hover .flagCount
+{
+    color:white !important;    
+}
+
+.divRightHeader:hover .loginUserName
+{
+    color:#7d7d7d !important;    
+}
+
+.notification:hover
+{
+    color: white !important;
+}
+
+.LogOut
+{
+    cursor: pointer;
+    position: relative;
+    font-size: 12px;
+    background-color: rgb(38, 166, 154);
+    border-color: rgb(221, 221, 221) !important;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    box-shadow: 0px 1px 3px #aaa;
+    padding: 6px 12px !important;
+    left: 48px;
+}
+
+.ChngPass
+{
+    cursor: pointer;
+    position: relative;
+    font-size: 12px;
+    background-color: #fff;
+    border-color: rgb(221, 221, 221) !important;
+    color: #444;
+    font-weight: 500;
+    box-shadow: 0px 1px 3px #aaa;
+    padding: 6px 12px !important;
+    left: 13px;
+}
+
+.LogOut:hover, .ChngPass:hover{
+    color: #444 !important;
+} 
+
+/*.LogOutDiv
+{
+    width: 100%;
+    height: 25px;
+    position: relative;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: rgb(76, 158, 217);
+}
+
+.LogOutDiv:hover {
+    background-color: #4C9ED9;   
+    cursor: pointer;
+    color: white;
+}*/
+
+/*.loginUserNameBox
+{
+    width: 150px;   
+    position: absolute;
+    top: 25px;
+    background-color: rgb(76, 158, 217);
+    border: solid 1px gray;
+}
+
+.loginUserName{
+    font-weight: bold;
+    float: right;
+    margin: 10px 0px 0px 0px;
+    color: #7d7d7d;
+    width: 100px;
+    display: inline-block;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    text-align: center;
+    cursor: pointer;
+}*/
+
+.notificationCount{
+    background-color: rgb(244, 67, 54) !important;
+    position: absolute;
+    color: rgb(255, 255, 255);
+    font-size: 10px;
+    margin: 1px -8px 0px 0px;
+    float: right;
+    text-align: center;
+    min-width: 17px;
+    font-weight: bold;
+    border-radius: 2px 2px 2px 2px;
+    cursor: pointer;
+    right: 114px;
+    z-index: 9;
+}
+
+.notification{
+    float: right;
+    position: relative;
+    color: rgb(125, 125, 125);
+    top: 1px;
+    font-size: 16px;
+    cursor: pointer;
+    width: auto;
+    padding: 9px 15px 9px 10px;
+}
+
+.flagCount{
+    background-color: green;
+    position: relative;
+    color: white;
+    font-size: 10px;
+    margin: 2px 25px 0px 0px;
+    float: left;   
+    min-width: 17px;
+    font-weight: bold;
+    padding-right: 2px;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.flag{  
+    height: 15px;
+    width: 15px;
+    float: right;
+    padding-right: 1px;
+    position: relative;
+    color: #7d7d7d;
+    top: 5px;
+    font-size: 15px;
+    cursor: pointer;
+
+}
+
+.UserImage{
+    height: 15px;
+    float: right;
+    position: relative;
+    font-size: 17px;
+    color: rgb(125, 125, 125);
+    cursor: pointer;
+    top: 0px;
+    padding: 9px 10px;
+}
+
+.SettingImage{     
+    height: 15px;
+    float: right;
+    position: relative;
+    top: 0px;
+    font-size: 17px;
+    color: rgb(125, 125, 125);
+    cursor: pointer;
+    padding: 9px 15px;
+}
+
+.SkypeImage{     
+    height: 15px;
+    float: right;
+    position: relative;
+    top: 0px;
+    font-size: 17px;
+    color: rgb(125, 125, 125);
+    cursor: pointer;
+    padding: 9px 10px;
+}
+
+.LoginImage{     
+    height: 15px;
+    position: relative;
+    padding: 5px 8px;
+    font-size: 22px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.notificationBox{   
+    max-height: 300px;
+    min-height: 90px;
+    width: 255px;   
+    position: absolute;
+    top: 25px;
+    background-color: white;
+    border: solid 1px gray;
+    color: black;
+}
+.flagBox{  
+    height: 120px;
+    width: 250px;   
+    position: absolute;
+    top: 25px;
+    background-color: lightgray;
+    border: solid 1px gray;
+    color: black;
+}
+
+.TopHeader {
+    height: 34px;
+    float: left;
+    width: 100%;
+    min-width: 855px;
+    top: 0px;
+    background-color: #fff;
+    /*z-index: 999;*/
+    position:fixed;
+    border-bottom: 1px solid rgb(1, 150, 135);
+}
+
+.breadcrumb div div {
+    height: 34px;
+    font-family: "Merriweather Sans";
+    outline: none;
+    display: block;
+    float: left;
+    font-size: 12px;
+    line-height: 25px;
+    color: white;
+    padding: 0 10px 0 25px;
+    background: white;
+    background: linear-gradient(#666, #333);
+    position: relative;
+    text-decoration: none;
+    max-width: 250px;    
+    cursor: pointer;
+}
+
+.breadcrumb div div a{
+    color: rgb(71, 71, 71);
+    text-decoration: none;
+}
+
+.flat div div, .flat div div:after {
+    background: white;
+    color: white;
+    transition: all 0.5s;
+    font-family: Arial;
+    font-weight: 600;
+}
+
+.breadcrumb div div:first-child {
+    padding-left: 15px;
+}
+
+.breadcrumb div div:first-child:before {
+    padding-right: 10px;
+}
+
+.breadcrumb div div:last-child {
+    padding-right: 5px;
+}
+
+.flat div div, .flat div div:after {
+    background: white;
+    color: rgb(71, 71, 71);
+    transition: all 0.5s;
+    font-family: Arial;
+    font-weight: 600;
+}
+
+.flat div div:before {
+    background: white;
+    box-shadow: 0 0 0 1px #ccc;
+}
+
+.dataman {
+    font-family: 'Merriweather Sans', arial, verdana;
+    background-color: #4C9ED9;
+    font-size: 12px;
+    color: white;
+    float: left;
+    height: 34px;
+    min-width: 80px;
+}
+
+.CompanyNameHeader
+{
+    max-width: 240px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: Gray !important;
+    padding: 0px 4.7px;
+    border-right: 1px solid gray;
+    line-height: normal !important;
+    margin-top: 5px;
+
+}
+
+.FinancialNameHeader{
+    max-width: 240px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: Gray !important;
+    padding: 0px 4.7px;
+    border-right: 1px solid gray;
+    line-height: normal !important;
+    margin-top: 5px;
+}
+
+.SiteNameHeader
+{
+    max-width: 240px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: Gray !important;
+    padding: 0px 4.7px;
+    line-height: normal !important;
+    margin-top: 5px;
+}
+
+.breadcrumb div div{
+    padding:0 !important;
+}
+
+.flat .CurrMoudeNameHeader{
+    background-color:#fff;
+    color: white;    
+
+}
+.flat .CurrMoudeNameHeader a{
+    color: rgb(1, 78, 96);
+    max-width: 80px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 4px 10px 2.5px;
+    font-weight: bold;
+    background-color: rgba(1, 150, 135, 0.2);
+    border-bottom: 2px solid rgb(1, 150, 135);
+}
+
+.modulelistMenu {    
+    width: 99.9%;
+    position: absolute;
+    z-index: 20000000;
+    top: 36px !important;
+    background-color: white;
+}
+
+.leftArrow {
+    width: 20px;
+    height: 69px;   
+    position: absolute;
+    left: 0px;
+    z-index: 20000000;
+    cursor: pointer;
+}
+
+.rightArrow {
+    width: 20px;
+    height: 69px;   
+    position:absolute;
+    right:0px;
+    z-index: 20000000;
+    cursor: pointer;
+}
+
+.moduleContainer {
+    width:100%;
+    background-color: white;
+    position:absolute;
+}
+
+.modulelist {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0px 1px 3px rgb(170, 170, 170);
+    border-bottom: 1px solid #ccc;
+}
+
+.modulelist table{
+    margin: 0px auto;
+}
+
+.modulelist table tr td img{
+    height: 35px;
+    width: 35px;
+}
+
+.divRightHeader{
+    color: white;
+    width: auto;
+    display: inline-block;
+    float: right;
+    margin-top: 4px;
+    background: #eee;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+}
+.dmLogo {
+    font-weight: bold;
+    float: left;
+    color: white;
+    background-color: rgb(1, 150, 135);
+    font-size: 24px;
+    text-align: center;
+    font-family: Arial;
+    padding: 2px 0px;
+}
+
+.pnlRightSilder{
+    width: 220px;
+    height: 96%;
+    position: absolute;
+    top: 25px;
+    right: 0px;
+    background-color: #666;     
+    z-index: 1000000;
+    float: right;
+    overflow: auto;
+}
+
+.closeAllModules
+{
+    width: 100%;
+    float: left;
+    color: rgb(255, 255, 255);
+    padding: 8px 0px;
+    background: none repeat scroll 0% 0% rgb(81, 99, 149);
+    border-left: 1px solid;
+}
+
+.closeAllModules span{
+    padding: 6px;
+    font-size: 1em !important;
+    margin-top: 0px !important;
+}
+
+.closeAllModulesA
+{
+    float: left;
+    margin-left: 1px;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 6px 0px;
+    color: rgb(68, 68, 68);
+    font-size: 12px;
+}
+
+.moduleOpneButtos
+{
+    background: #fff;
+    width: 100%;
+    float: left;
+    border-left: 2px solid rgb(70, 191, 179);
+    border-bottom: 1px solid #eef5f9;
+    border-top: 1px solid #eef5f9;
+}
+.moduleOpneButtos span{
+    padding: 5px !important;
+}
+
+.moduleOpneButtos:first-child{
+    border-top: 1px solid #eef5f9;
+}
+
+.moduleOpneButtos:hover moduleOpneButtos
+{
+    background-color: lightskyblue;
+}
+
+.moduleOpneButtos:hover{
+    background: #009688 !important;
+}
+
+.moduleOpneButtos:hover span, .moduleOpneButtos:hover a{
+    color:#fff !important;
+}
+.moduleOpneButtosImg
+{
+    width:15px; height:15px; float:left; padding-top:4px; cursor:pointer;
+}
+
+.moduleOpneButtosA
+{
+    float:left; color:black !important; margin-left:5px !important; text-decoration: none; cursor:pointer;padding: 5px 0px;
+}
+
+.ellipsis{
+    display: inline-block;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.dm-mouse-hovering:hover{
+    border-bottom: 3px solid #028478;
+    background-color: #f7f7f7;
+    color: #029686 !important;
+}
+.dm-mouse-hovering:hover .notificationCount{
+    background-color: rgb(244, 67, 54) !important;
+    color: #fff !important;
+}
+
+.dm-parent-top-header > div{
+    height: auto !important;
+    line-height: normal !important;
+    background: transparent !important;
+}

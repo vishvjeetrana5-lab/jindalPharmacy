@@ -1,0 +1,8 @@
+{
+  "appKey": "ddf8aba0-8bb3-47b1-8d82-5ffc9296dd66",
+  "userName": "9879871100",
+  "deviceId": "1492741581|ezetap_android",
+  "requestURL": "https://demo.ezetap.com/api/3.0/p2padapter/pay",
+  "responseURL": "https://demo.ezetap.com/api/3.0/p2padapter/status",
+  "cancelURL": "http://example.com/cancel1"
+}

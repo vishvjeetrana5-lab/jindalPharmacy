@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name='com.sencha.gxt.ui.GXT'/>
+    <inherits name="dataman.dmToolkit.Self"/>
+    <inherits name="dataman.dmToolkit.DmMessageBox"/>
+    <inherits name="dataman.dmToolkit.DmFileUploadButton"/>
+    <inherits name="dataman.dmToolkit.DmTextBoxTime"/>
+    <inherits name="dataman.dmToolkit.DmInputBox"/>
+    <inherits name="dataman.dmToolkit.IsWidgetExtended"/>
+    <inherits name="dataman.dmToolkit.DmSession"/>
+    <inherits name="dataman.dmToolkit.DmLabel"/>
+    <inherits name="dataman.dmToolkit.DmDateBox"/>
+    <inherits name="dataman.dmToolkit.DmTextBox"/>
+    <inherits name="dataman.dmToolkit.DmTextBoxNumeric"/>
+    <inherits name="dataman.dmToolkit.DmTextArea"/>
+    <inherits name="dataman.dmToolkit.DmSuggestBox"/>
+    <inherits name="dataman.dmToolkit.DmStatic"/>
+    <inherits name="dataman.dmToolkit.DmTopControl"/>
+    <inherits name="dataman.dmToolkit.DmUserControl"/>
+    <inherits name="dataman.dmToolkit.DmToolContainer"/>
+    <inherits name="dataman.dmToolkit.DmGrid"/>
+    <inherits name="dataman.dmToolkit.DmGridPaging"/>
+    <inherits name="dataman.dmToolkit.DmHelpGrid"/>
+    <inherits name="dataman.dmToolkit.DmHelpGridMulti"/>
+    <inherits name="dataman.dmToolkit.DmTextHelp"/>
+    <inherits name="dataman.dmToolkit.DmTextHelpGrid"/>
+    <inherits name="dataman.dmToolkit.DmTextHelpMulti"/>
+    <inherits name="dataman.dmToolkit.DmFind"/>
+    <inherits name="dataman.dmToolkit.DmReportLayout"/>
+    <inherits name="dataman.dmToolkit.SingleLineMaster"/>
+    <inherits name="dataman.dmToolkit.DmGridEditPanel"/>
+    <inherits name="dataman.dmToolkit.OverHead"/>
+    <inherits name='dataman.dmToolkit.OverHeadLine' />
+    <inherits name="dataman.dmToolkit.DmFileManager"/>
+    <inherits name='dataman.dmToolkit.DmFileUploader' />
+    <inherits name='dataman.dmToolkit.DmGUI' />
+    <inherits name="dataman.dmBase.DmBase"/>
+    <inherits name='dataman.dmToolkit.ManageSite' />
+    <inherits name='dataman.dmToolkit.DmMasterReportLayout' />
+    <inherits name='dataman.dmToolkit.DmScheduler' />
+    <inherits name='dataman.dmToolkit.DmNotifications' />
+    <inherits name='dataman.dmToolkit.DmSnapshot' />
+    <inherits name='dataman.dmToolkit.DmImageCanvas' />
+    <inherits name='dataman.dmToolkit.DmColorPicker' />
+    <inherits name='dataman.dmToolkit.WalkThrough' />
+    <inherits name='dataman.dmToolkit.DmTextBoxMobile' />
+    <inherits name='dataman.dmToolkit.DmCheckBox' />
+    <inherits name='dataman.dmToolkit.OpenSourceReport' />
+    <inherits name="dataman.dmToolkit.DmRemarkTextBox"/>
+    <inherits name="dataman.dmToolkit.PrinterMapping"/>
+    <inherits name="dataman.dmToolkit.DmMenuBar"/>
+    <inherits name="dataman.dmToolkit.DmMenuBarItem"/>
+    <inherits name="dataman.dmToolkit.DmMenu"/>
+    <inherits name="dataman.dmToolkit.DmMenuItem"/>
+    <inherits name='dataman.dmToolkit.DmChart'/>
+    <inherits name='dataman.dmToolkit.DmImportData'/>
+    <inherits name="dataman.dmToolkit.Gst"/>
+    <inherits name="dataman.dmToolkit.ItemAdjustment"/>
+    <inherits name="dataman.dmToolkit.AccountAdjustment"/>
+    <inherits name="dataman.dmToolkit.ITS"/>
+    <inherits name="dataman.dmToolkit.AccountPosting"/>
+    <inherits name="dataman.dmToolkit.GSTS"/>
+    <inherits name="dataman.dmToolkit.TdsCategoryPopup"/>
+    <inherits name="dataman.dmToolkit.ModifyReason"/>
+    <inherits name="dataman.dmToolkit.EGstPopup"/>
+    <inherits name="dataman.dmToolkit.PartyDetailPopup"/>
+    <inherits name="dataman.dmToolkit.RazorPay"/>
+    <inherits name="dataman.dmToolkit.NarrationSearch"/>
+    <inherits name="dataman.dmToolkit.RazorPay"/>
+    <inherits name="dataman.dmToolkit.DmDisplayStrip"/>
+    <inherits name="dataman.dmToolkit.LedgerPostingDisplayPopup"/>
+   
+    
+    <source path = "self/client"/>
+    <source path = "self/shared"/>
+</module>

@@ -1,0 +1,40 @@
+package dataman.dmToolkit.dmFileUploader.client.events;
+
+/**
+ * An interface that can be used as a callback handler when uploader completion
+ * events are fired by the Uploader component. General usage is as follows:  <code><pre>
+ * uploader.setUploadCompleteHandler(new UploadCompleteHandler() {
+ *    public boolean onUploadComplete(UploadCompleteEvent event) {
+ *       Window.alert("Uploader complete for file " + event.getFile().getName());
+ *       return true;
+ *    }
+ * });
+ * </pre></code>
+ * <p/>
+ * Note that the 'uploadComplete' event is always fired at the end of an
+ * uploader cycle (after uploadError or uploadSuccess). At this point the
+ * uploader is complete and another uploader can be started.
+ * <p/>
+ * If you want the next uploader to start automatically this is a good place to
+ * call this.uploadStart(). Use caution when calling uploadStart inside the
+ * uploadComplete event if you also have code that cancels all the uploads in a
+ * queue.
+ * <p/>
+ * See the documentation on the {@link DmUploadCompleteEvent} class for more
+ * details on the data available when an uploader complete event occurs.
+ *
+ * @author squinn@moxiegroup.com (Shawn Quinn)
+ */
+public interface DmUploadCompleteHandler {
+
+    /**
+     * This method is fired whenever a uploader completion event occurs in the
+     * Uploader component. See the {@link DmUploadCompleteEvent} class for more
+     * details on the data available when this event is fired.
+     *
+     * @param uploadCompleteEvent The details of the event that occurred.
+     * @return The response to send back to the event handler function
+     */
+    public boolean onUploadComplete(DmUploadCompleteEvent uploadCompleteEvent);
+
+}

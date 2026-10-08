@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name='com.google.gwt.user.User' />
+    
+<!--    <replace-with class="dataman.dmToolkit.dmMessageBox.client.DmWindowAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.Window.WindowAppearance" />
+        <when-property-is name="gxt.theme" value="blue" />
+    </replace-with>
+  -->
+<!--    <replace-with class="dataman.dmToolkit.dmMessageBox.client.DmContentPanelAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.ContentPanel.ContentPanelAppearance" />
+    </replace-with>
+    
+      <replace-with class="dataman.dmToolkit.dmMessageBox.client.DmFramedPanelAppearance">
+      <when-type-is class="com.sencha.gxt.widget.core.client.FramedPanel.FramedPanelAppearance" />
+      <when-property-is name="gxt.theme" value="blue" />
+    </replace-with>-->
+  
+    <source path = "dmMessageBox/client"/>
+</module>

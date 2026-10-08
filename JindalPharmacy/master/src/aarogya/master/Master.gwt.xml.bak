@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="dataman.dmToolkit.DmToolkit"/>
+    <inherits name="dataman.dmBase.DmBase"/>
+    <inherits name="aarogya.selfToolkit.SelfToolkit"/>
+    
+    <inherits name="aarogya.master.HolidayMaster"/>
+    <inherits name="aarogya.master.FrequencyMaster"/>
+    <inherits name="aarogya.master.AdditionalUserPermission"/>
+    <inherits name="aarogya.master.ConsultantSpeciMaster"/>
+    <inherits name="aarogya.master.DepartmentMaster"/>
+    <inherits name="aarogya.master.CaseMaster"/>
+    <inherits name="aarogya.master.ICDXMaster"/>
+    <inherits name="aarogya.master.CardTypeMaster"/>
+    <inherits name="aarogya.master.CardReceive"/>
+    <inherits name="aarogya.master.CardRegistration"/>
+    <inherits name="aarogya.master.CardDeactive"/>
+    <inherits name="aarogya.master.CardRecharge"/>
+    <inherits name="aarogya.master.CardDischarge"/>
+    <inherits name="aarogya.master.ConsultantMaster"/>
+    <inherits name="aarogya.master.OrganizationMaster"/>
+    <inherits name="aarogya.master.ServicesApplicableTo"/>
+    <inherits name="aarogya.master.ServiceCategoryMaster"/>
+    <inherits name="aarogya.master.ServiceGroupMaster"/>
+    <inherits name="aarogya.master.ServiceMaster"/>
+    <inherits name="aarogya.master.PackageMaster"/>
+    <inherits name="aarogya.master.PackageRateList"/>
+    <inherits name="aarogya.master.PackageDetail"/>
+    <inherits name="aarogya.master.EnvironmentService"/>
+    <inherits name="aarogya.master.EnvironmentSettingCompany"/>
+    <inherits name="aarogya.master.EnvironmentSettingSite"/>
+    <inherits name="aarogya.master.ConsultantLeaveMaster"/>
+    <inherits name="aarogya.master.PrescriptionValueTemplate"/>
+    <inherits name="aarogya.master.PrescriptionGuiMapping"/>
+    <inherits name="aarogya.master.ConsultantSharingMaster"/>
+    <inherits name="aarogya.master.Reports"/>
+    <inherits name="aarogya.master.AllergyMaster"/>
+    <inherits name="aarogya.master.ImportData"/>
+    <inherits name="aarogya.master.HSNMaster"/>
+    <inherits name="aarogya.master.ReferredMaster"/>
+    <inherits name="aarogya.master.EOD"/>
+    <inherits name="aarogya.master.EmployeeMaster"/>
+    <inherits name="aarogya.master.DesignationMaster"/>
+    <inherits name="aarogya.master.SittingLocation"/>
+    <inherits name="aarogya.master.OrganizationServiceMapping"/>
+    <inherits name="aarogya.master.OverHeadCategoryMaster"/>
+    <inherits name="aarogya.master.OverHeadMaster"/>
+    <inherits name="aarogya.master.OrganizationServiceMaster"/>
+    <inherits name="aarogya.master.TabIndexSettings"/>
+    <inherits name="aarogya.master.CorporateEmployeeMaster"/>
+    <inherits name="aarogya.master.PrescriptionCustomItemMast"/>
+    <inherits name="aarogya.master.PrescriptionCustomGroupMast"/>
+    <inherits name="aarogya.master.GenerateGstCsv"/>
+    <inherits name="aarogya.master.PatientScheduleMaster"/>
+    <inherits name="aarogya.master.ManagePatientSchedule"/>
+    <inherits name="aarogya.master.ForeignCurrencyExchange"/>
+    <inherits name="aarogya.master.ServicePriceList"/>
+    <inherits name="aarogya.master.ReceiptBookMapping"/>
+    <inherits name="aarogya.master.LogConfiguration"/>
+    <inherits name="aarogya.master.GuiMapping"/>
+    <inherits name="aarogya.master.EarningDeductionMaster"/>
+    <inherits name="aarogya.master.WorkingDayEntry"/>
+    <inherits name="aarogya.master.CategoryPoolMaster"/>
+    <inherits name="aarogya.master.SalaryCodeDefinition"/>
+    <inherits name="aarogya.master.PoolGroupMaster"/>
+    <inherits name="aarogya.master.PoolGroupDetails"/>
+    <inherits name="aarogya.master.EarningDeductionEntry"/>
+    <inherits name="aarogya.master.PoolEarningDeductionEntry"/>
+    <inherits name="aarogya.master.LocationMaster"/>
+    <inherits name="aarogya.master.BillHandle"/>
+    <inherits name="aarogya.master.BillHandleApproval"/>
+    <inherits name="aarogya.master.PatientTypeMaster"/>
+    <inherits name="aarogya.master.RateListMaster"/>
+    <inherits name="aarogya.master.ProvisionalStatement"/>
+    <inherits name="aarogya.master.ProvisionalStatementApproval"/>
+    <inherits name="aarogya.master.DiscountReasonMaster"/>
+    <inherits name="aarogya.master.PriceListMaster"/>
+    <inherits name="aarogya.master.DisabilityMaster"/>
+    <inherits name="aarogya.master.CustomEnviro"/>
+    
+                                   
+    
+    <source path = "self/client"/>
+    <source path = "self/shared"/>
+</module>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="14">
+        <file>
+            <url>src/dataman/dmToolkit/dmStatic/server/DmServer.java</url>
+            <bookmark id="10">
+                <name/>
+                <line>132</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>src/dataman/dmToolkit/dmFind/client/DmFind.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>64</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>src/dataman/dmToolkit/dmGridPaging/client/DmGridPaging.java</url>
+            <bookmark id="11">
+                <name/>
+                <line>92</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>src/dataman/dmToolkit/dmFileUploader/client/DmUploader.java</url>
+            <bookmark id="8">
+                <name/>
+                <line>1167</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>src/dataman/dmToolkit/dmTopControl/client/DmTopControl.java</url>
+            <bookmark id="9">
+                <name/>
+                <line>115</line>
+                <key/>
+            </bookmark>
+            <bookmark id="4">
+                <name/>
+                <line>330</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>src/dataman/dmToolkit/dmStatic/client/DmClient.java</url>
+            <bookmark id="13">
+                <name/>
+                <line>517</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>src/dataman/dmToolkit/dmTextHelp/client/DmTextHelp.java</url>
+            <bookmark id="12">
+                <name/>
+                <line>182</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group name="aarogya"/>
+        <group name="dcm"/>
+        <group/>
+    </open-files>
+</project-private>

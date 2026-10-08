@@ -1,0 +1,41 @@
+package aarogya.pharmacy.medicineIssue.shared;
+
+import aarogya.pharmacy.self.shared.BarCode_Mdl;
+import aarogya.selfToolkit.toolTip.shared.ToolTip_Mdl;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import dataman.dmBase.self.shared.UserPermission;
+import dataman.dmBase.self.shared.*;
+import java.util.List;
+
+public interface MedicineIssue_SrvAsync {
+
+    public void getNavigator(UserPermission userPermission, AsyncCallback<DmResult<List<KeyFieldExtended>>> result);
+
+    public void getMoveRec(String strKey, AsyncCallback<DmResult<MedicineIssue_Mdl>> result);
+
+    public void deleteRecord(String strKey, AsyncCallback<DmResult<String>> result);
+
+    public void saveRecord(MedicineIssue_Mdl mrTempCurrent, MedicineIssue_Mdl mrTempPrevious, String voucherPrefix, AsyncCallback<DmResult<String>> result);
+
+    public void getFind(UserPermission userPermission, DmHelper helper, boolean blnToEndOfFile, AsyncCallback<DmResultPageing<List<Find_Mdl>>> result);
+
+    public void getTxtHVoucher(DmHelper helper, boolean blnToEndOfFile, AsyncCallback<DmResultPageing<List<KeyFieldExtended>>> result);
+
+    public void getTxtHIssueTo(String v_Type, DmHelper helper, boolean blnToEndOfFile, AsyncCallback<DmResultPageing<List<TxtHIssueTo_Mdl>>> result);
+
+    public void getTxtHDepartment(DmHelper helper, boolean blnToEndOfFile, AsyncCallback<DmResultPageing<List<KeyFieldExtended>>> result);
+
+    public void getTxtHRequisitionNo(String departmentCode, String voucherDate, String itemIssueDocId, DmHelper helper, boolean blnToEndOfFile, AsyncCallback<DmResultPageing<List<TxtHRequisitionNo_Mdl>>> result);
+
+    public void getDefaultValues(AsyncCallback<DmResult<DefaultValue_Mdl>> result);
+
+    public void getMedicineDetail(String reqDocId, String itemIssueDocId, String departmentCode, String v_Date, AsyncCallback<DmResult<List<GrdMedicineDetail_Mdl>>> result);
+
+    public void getToolTipShowStock(String medCode, String ibCode, String fromDepartment, String toDepartment, AsyncCallback<DmResult<List<ToolTip_Mdl>>> result);
+
+    public void getBarCodeSearch(String barCode, String voucherDate, String departmentCode, String siteCode, boolean isExpiryMedicine, AsyncCallback<DmResult<BarCode_Mdl>> result);
+    
+        public void getServerDateTime(AsyncCallback<String[]> result);
+        
+        public void getRequisitionNoDetail(String requisitionDocID, AsyncCallback <DmResultPageing<List<TxtHRequisitionNo_Mdl>>> result );
+}

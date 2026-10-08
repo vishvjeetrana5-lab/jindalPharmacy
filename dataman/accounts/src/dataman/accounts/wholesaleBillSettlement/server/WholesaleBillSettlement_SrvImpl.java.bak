@@ -1,0 +1,1119 @@
+package dataman.accounts.wholesaleBillSettlement.server;
+
+import dataman.accounts.wholesaleBillSettlement.shared.DefaultValue_Mdl;
+import dataman.accounts.wholesaleBillSettlement.shared.Find_Mdl;
+import dataman.accounts.wholesaleBillSettlement.shared.GrdPendingFPReqDetail_Mdl;
+import dataman.accounts.wholesaleBillSettlement.shared.GridDrAdjustBills_Mdl;
+import dataman.accounts.wholesaleBillSettlement.shared.LedgerAdj_Mdl;
+import dataman.accounts.wholesaleBillSettlement.shared.TxtHAccountName_Mdl;
+import dataman.accounts.wholesaleBillSettlement.shared.TxtHSupplier_Mdl;
+import dataman.accounts.wholesaleBillSettlement.shared.TxtHVoucherType_Mdl;
+import dataman.accounts.wholesaleBillSettlement.shared.WholesaleBillSettlement_Mdl;
+import dataman.accounts.wholesaleBillSettlement.shared.WholesaleBillSettlement_Srv;
+import dataman.accounts.wholesaleBillSettlement.shared.WholesaleBillSettlement_Vld;
+import dataman.dmBase.dmPrepareStatement.server.DmPreparedStatement;
+import dataman.dmBase.dmPrepareStatement.server.DmSavePoint;
+import dataman.dmBase.dmSession.server.DmRSSPrivate;
+import dataman.dmBase.self.shared.DmException;
+import dataman.dmBase.self.shared.DmHelper;
+import dataman.dmBase.self.shared.DmResult;
+import dataman.dmBase.self.shared.DmResultPageing;
+import dataman.dmBase.self.shared.DmSQLWithParam;
+import dataman.dmBase.self.shared.KeyFieldExtended;
+import dataman.dmBase.self.shared.UserPermission;
+import dataman.dmToolkit.dmStatic.server.DmServer;
+import dataman.dmToolkit.dmStatic.shared.DmShared;
+import dataman.dmToolkit.walkThrough.shared.WalkThroughEnum;
+import dataman.libraryMenu.self.shared.LibraryVoucherCategory;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+public class WholesaleBillSettlement_SrvImpl extends DmRSSPrivate implements WholesaleBillSettlement_Srv {
+
+    private LibraryVoucherCategory pvc = new LibraryVoucherCategory();
+
+    private final String vCat1 = "'" + pvc.WHOLE_SALE_BILL_SETTLEMENT + "'";
+    private final String vCat = "'" + pvc.BANK_RECEIPT + "'";
+
+    @Override
+    public DmResultPageing<List<TxtHVoucherType_Mdl>> getTxtHVoucherType(DmHelper helper, boolean blnToEndOfFile) {
+        DmResultPageing<List<TxtHVoucherType_Mdl>> rstTemp = new DmResultPageing<>();
+        List<TxtHVoucherType_Mdl> lstTemp = new ArrayList<>();
+        TxtHVoucherType_Mdl listNode;
+        Connection cnTemp = null;
+        ResultSet rsTemp = null;
+        DmPreparedStatement psTemp = null;
+        String sqlQuery;
+
+        try {
+            rstTemp.setData(lstTemp);
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+            sqlQuery = "SELECT VT.V_Type,VT.Description,"
+                    + "VT.Category"
+                    + " FROM Voucher_Type VT "
+                    + " WHERE vt.category IN ('" + pvc.WHOLE_SALE_BILL_SETTLEMENT + "')";
+            DmSQLWithParam sqlWithParam = new DmSQLWithParam();
+            sqlWithParam.setSQL(sqlQuery);
+            psTemp = DmServer.evaluateHelper(helper, sqlWithParam, cnTemp, blnToEndOfFile, this);
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                listNode = new TxtHVoucherType_Mdl();
+                listNode.setSharedKeyFieldCode(DmShared.xNull(rsTemp.getString("V_Type")));
+                listNode.setSharedKeyFieldName(DmShared.xNull(rsTemp.getString("Description")));
+                listNode.setCategory(DmShared.xNull(rsTemp.getString("Category")));
+                lstTemp.add(listNode);
+            }
+            helper.positioning(lstTemp.size(), blnToEndOfFile);
+            rstTemp.setPaging(helper.getPaging());
+            rstTemp.setStatus(true);
+            rsTemp.close();
+            psTemp.close();
+            cnTemp.close();
+        } catch (Exception e) {
+            rstTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return rstTemp;
+    }
+
+    @Override
+    public DmResultPageing<List<TxtHAccountName_Mdl>> getTxtHAccountName(DmHelper helper, boolean blnToEndOfFile, String v_Type) {
+        DmResultPageing<List<TxtHAccountName_Mdl>> rstTemp = new DmResultPageing<>();
+        List<TxtHAccountName_Mdl> lstTemp = new ArrayList<>();
+        TxtHAccountName_Mdl listNode;
+        Connection cnTemp = null;
+        ResultSet rsTemp = null;
+        DmPreparedStatement psTemp = null;
+        String sqlQuery;
+        DmSQLWithParam sqlWithParam = new DmSQLWithParam();
+
+        try {
+            rstTemp.setData(lstTemp);
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+
+            sqlQuery = "SELECT"
+                    + "   sg.subCode AS code"
+                    + " , sg.name"
+                    + " , c.cityName"
+                    + " , sg.manualCode"
+                    + " , sgn.name AS nature"
+                    + " , sgn.manualCode AS natureManualCode"
+                    + " , sg.tds_Catg AS tdsCode"
+                    + " , tc.Name AS tdsName"
+                    + "	FROM subGroup sg"
+                    + "	LEFT JOIN city c ON c.cityCode = sg.cityCode"
+                    + "	LEFT JOIN subGroupSiteList sgl ON sg.subCode = sgl.subCode"
+                    + "	LEFT JOIN subGroupNature sgn ON sg.nature = sgn.code"
+                    + " LEFT JOIN tdsCat tc ON sg.tds_Catg = tc.code "
+                    + "	WHERE sgl.site_Code = :site_Code"
+                    + " AND sgn.code IN (SELECT nature FROM acFilteration WHERE v_Type = :v_Type)"
+                    + "	AND sg.isActive = 1";
+            sqlWithParam.setSQL(sqlQuery);
+            psTemp = DmServer.evaluateHelper(helper, sqlWithParam, cnTemp, blnToEndOfFile, this);
+            psTemp.setString("v_Type", DmShared.iNull(v_Type).toString());
+            psTemp.setString("site_Code", DmServer.getSsnSiteCode(this));
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                listNode = new TxtHAccountName_Mdl();
+                listNode.setSharedKeyFieldCode(DmShared.xNull(rsTemp.getString("code")));
+                listNode.setSharedKeyFieldName(DmShared.xNull(rsTemp.getString("name")));
+                listNode.setManualCode(DmShared.xNull(rsTemp.getString("manualCode")));
+                listNode.setCityName(DmShared.xNull(rsTemp.getString("cityName")));
+                listNode.setNature(DmShared.xNull(rsTemp.getString("nature")));
+                listNode.setNatureManualCode(DmShared.xNull(rsTemp.getString("natureManualCode")));
+                listNode.setTdsCatCode(DmShared.xNull(rsTemp.getString("tdsCode")));
+                listNode.setTdsCatName(DmShared.xNull(rsTemp.getString("tdsName")));
+                lstTemp.add(listNode);
+            }
+            helper.positioning(lstTemp.size(), blnToEndOfFile);
+            rstTemp.setPaging(helper.getPaging());
+
+            rsTemp.close();
+            psTemp.close();
+
+            rstTemp.setStatus(true);
+            cnTemp.close();
+        } catch (Exception e) {
+            rstTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return rstTemp;
+    }
+
+    @Override
+    public DmResult<DefaultValue_Mdl> getDefaultValues() {
+        DmResult<DefaultValue_Mdl> dmrTemp = new DmResult();
+        DefaultValue_Mdl defaultValue = new DefaultValue_Mdl();
+        Connection cnTemp = null;
+        ResultSet rsTemp = null;
+        DmPreparedStatement psTemp = null;
+        String sqlQuery;
+
+        try {
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+
+            sqlQuery = "SELECT  vt.v_Type, vt.description, vt.guiTemplateCode "
+                    + "         FROM voucher_Type vt "
+                    + "         WHERE vt.short_Name = " + vCat1 + " AND vt.isActive = 1 ";
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+            rsTemp = psTemp.executeQuery();
+            if (rsTemp.next()) {
+                defaultValue.setVoucherTypeCode(DmShared.iNull(rsTemp.getString("v_Type")).toString());
+                defaultValue.setVoucherTypeName(DmShared.xNull(rsTemp.getString("description")));
+
+            }
+            rsTemp.close();
+            psTemp.close();
+
+            dmrTemp.setData(defaultValue);
+            cnTemp.close();
+            dmrTemp.setStatus(true);
+        } catch (Exception e) {
+            dmrTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return dmrTemp;
+    }
+
+    @Override
+    public DmResultPageing<List<TxtHSupplier_Mdl>> getTxtHSupplier(DmHelper helper, boolean blnToEndOfFile) {
+        DmResultPageing<List<TxtHSupplier_Mdl>> rstTemp = new DmResultPageing<>();
+        Connection cnTemp = null;
+        ResultSet rsTemp = null;
+        DmPreparedStatement psTemp = null;
+        DmSQLWithParam sqlWithParam = new DmSQLWithParam();
+        List<TxtHSupplier_Mdl> listNode = new ArrayList<>();
+        TxtHSupplier_Mdl node;
+        String sqlQuery;
+        rstTemp.setData(listNode);
+
+        try {
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+
+            sqlQuery = " select sg.name AS name,sg.subCode AS code,\n"
+                    + " sg.manualCode as manualCode , ct.cityName as cityName\n"
+                    + " from subGroup sg \n"
+                    + " left join subGroupNature sgn on sgn.code = sg.nature \n"
+                    + " left join city ct on ct.cityCode = sg.cityCode \n"
+                    + " WHERE sgn.manualCode = 'CT' ";
+
+            sqlWithParam.setSQL(sqlQuery);
+            psTemp = DmServer.evaluateHelper(helper, sqlWithParam, cnTemp, blnToEndOfFile, this);
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                node = new TxtHSupplier_Mdl();
+                node.setSharedKeyFieldCode(DmShared.xNull(rsTemp.getString("code")));
+                node.setSharedKeyFieldName(DmShared.xNull(rsTemp.getString("name")));
+                node.setManualCode(DmShared.xNull(rsTemp.getString("manualCode")));
+                node.setCityName(DmShared.xNull(rsTemp.getString("cityName")));
+                listNode.add(node);
+            }
+            rsTemp.close();
+            psTemp.close();
+            cnTemp.close();
+
+            helper.positioning(listNode.size(), blnToEndOfFile);
+            rstTemp.setPaging(helper.getPaging());
+            rstTemp.setStatus(true);
+        } catch (Exception e) {
+            rstTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return rstTemp;
+    }
+
+    @Override
+    public DmResult<List<GrdPendingFPReqDetail_Mdl>> getPendingFinalPaymnetReqDetail(String supplierCode) {
+        DmResult<List<GrdPendingFPReqDetail_Mdl>> dmrTemp = new DmResult();
+        Connection cnTemp = null;
+        DmPreparedStatement psTemp = null;
+        ResultSet rsTemp = null;
+        List<GrdPendingFPReqDetail_Mdl> lstNode = new ArrayList<>();
+        String sqlQuery = "";
+        dmrTemp.setData(lstNode);
+        try {
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+            /*====================================< Get Grid Detail  >====================================*/
+
+            sqlQuery = "Select lg.docid as sbDocId ,lg.recID as sbRecId, \n"
+                    + "   lg.v_Date  as voucherDate,vt.short_Name as voucherType ,vt.description , \n"
+                    + "   lg.refNo as partyBillNo, lg.refDate as partyBillDate,sg.name as debtorName,\n"
+                    + "   lg.subcode as debtorCode,lg.amtDr as billAmount,isNull(v1.adjustment,0) adjustmentAmt,"
+                    + "   lg.amtdr - case when isnull(v1.adjustment,0) < 0 then -(isnull(v1.adjustment,0)) else isnull(v1.adjustment,0) end as pendingToAdjust  \n"
+                    + "   ,lg.v_SNo as lgV_SNo \n"
+                    + "   FROM ledger lg \n"
+                    + "   left JOIN voucher_Type vt On vt.v_Type=lg.v_type \n"
+                    + "   LEFT JOIN subGroup AS sg ON lg.subcode = sg.subCode\n"
+                    + "   left join (\n"
+                    + "   select adj.adj_DocId as docid,sum(adj.adjustment) as adjustment, max(adj.adj_V_SNo) V_SNo\n"
+                    + "		from ledgerAdj as adj\n"
+                    + "		group by adj.adj_DocId\n"
+                    + "   ) as v1 on v1.docId = lg.docId  and v1.V_SNo = lg.v_sno\n"
+                    + "    where lg.subcode = :supplierCode\n"
+                    + "	 and lg.isPosted=1\n"
+                    + "	 and lg.site_Code = :site_Code\n"
+                    + "	 and lg.v_Prefix= " + DmServer.getSsnVoucherPrefix(this) + " \n"
+                    + "	 and lg.amtDr-case when isnull(v1.adjustment,0) < 0 then -(isnull(v1.adjustment,0)) else isnull(v1.adjustment,0) end >0\n"
+                    + "	 and vt.description not in ('Whole Sale Bill Return')\n"
+                    + "  and vt.category not in (" + vCat + ")"
+                    + "  order by lg.docId";
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+            psTemp.setLong("supplierCode", DmShared.iNull(supplierCode).longValue());
+            psTemp.setString("site_Code", DmServer.getSsnSiteCode(this));
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                GrdPendingFPReqDetail_Mdl node = new GrdPendingFPReqDetail_Mdl();
+                node.setSharedKeyFieldCode(DmShared.xNull(rsTemp.getString("sbDocId")));
+                node.setSharedKeyFieldName(DmShared.xNull(rsTemp.getString("sbRecId")));
+                node.setLgV_SNo(DmShared.xNull(rsTemp.getString("lgV_SNo")));
+                node.setVoucherDate(DmShared.dNull(rsTemp.getDate("voucherDate")));
+                node.setVoucherType(DmShared.xNull(rsTemp.getString("voucherType")));
+                node.setPartyBillNo(DmShared.xNull(rsTemp.getString("partyBillNo")));
+                node.setPartyBillDate(DmShared.dNull(rsTemp.getDate("partyBillDate")));
+                node.setDebtorName(DmShared.xNull(rsTemp.getString("debtorName")));
+                node.setDebtorCode(DmShared.xNull(rsTemp.getString("debtorCode")));
+                node.setBillAmountAmt(DmShared.xNull(rsTemp.getString("pendingToAdjust")));
+
+                lstNode.add(node);
+            }
+            rsTemp.close();
+            psTemp.close();
+            cnTemp.close();
+            dmrTemp.setStatus(true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            dmrTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return dmrTemp;
+    }
+
+    @Override
+    public DmResult<List<GridDrAdjustBills_Mdl>> getPendingFinalCreditAdjmentRec(String supplierCode) {
+        DmResult<List<GridDrAdjustBills_Mdl>> dmrTemp = new DmResult();
+        Connection cnTemp = null;
+        DmPreparedStatement psTemp = null;
+        ResultSet rsTemp = null;
+        List<GridDrAdjustBills_Mdl> lstNode = new ArrayList<>();
+        String sqlQuery = "";
+        dmrTemp.setData(lstNode);
+        try {
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+
+            sqlQuery = "SELECT  lg.docId as billDocId,lg.recId AS billRecId ,lg.v_date as voucherDate,lg.v_SNo,sg.name as supplierName,sg.subcode as supplierCode\n"
+                    + "         ,sgc.name as contraAc,\n"
+                    + "		vt.short_Name as voucherType ,lg.refNo,\n"
+                    + "		lg.amtCr,\n"
+                    + "		--isnull(adj.adjustment,0) as adjAmt,\n"
+                    + "		case when isnull(adj.adjustment,0) < 0 then -(isnull(adj.adjustment,0)) else isnull(adj.adjustment,0) end as  adjAmt,\n"
+                    + "		lg.amtCr- case when isnull(adj.adjustment,0) < 0 then -(isnull(adj.adjustment,0)) else isnull(adj.adjustment,0) end as pendingAdjustment\n"
+                    + "\n"
+                    + "		FROM LEDGER LG\n"
+                    + "		left join subgroup sg on sg.subcode=lg.subcode\n"
+                    + "		left join subGroupNature sgn on sgn.code=sg.nature\n"
+                    + "		left join subgroup sgc on sgc.subcode=lg.contraSub\n"
+                    + "		left join voucher_Type vt on vt.v_Type=lg.v_Type\n"
+                    + "		left join customEnviro ce on ce.site_Code=lg.site_Code\n"
+                    + " \n"
+                    + "		left join (\n"
+                    + "		select adj.vr_DocId as docid,sum(adj.adjustment) as adjustment\n"
+                    + "		from ledgerAdj as adj\n"
+                    + "		group by adj.vr_DocId\n"
+                    + "		) as adj on adj.docid=lg.docid\n"
+                    + "		WHERE isnull(lg.amtcr,0)<>0 and lg.site_Code=1\n"
+                    + "		and lg.isPosted=1\n"
+//                    + "		and lg.v_Prefix=25   \n"
+                    //                    + "		and vt.description not in ('Bank Receipt','Cash Receipt')\n"
+                    + "		and lg.amtcr-case when isnull(adj.adjustment,0) < 0 then -(isnull(adj.adjustment,0)) else isnull(adj.adjustment,0) end <>0\n"
+                    + "		and lg.subcode= :supplierCode \n"
+                    + "		order by lg.docId,vt.short_Name";
+
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+            psTemp.setLong("supplierCode", DmShared.iNull(supplierCode).longValue());
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                GridDrAdjustBills_Mdl node = new GridDrAdjustBills_Mdl();
+                node.setSharedKeyFieldCode(DmShared.xNull(rsTemp.getString("billDocId")));
+                node.setSharedKeyFieldName(DmShared.xNull(rsTemp.getString("billRecId")));
+                node.setVoucherDate(DmShared.dNull(rsTemp.getDate("voucherDate")));
+                node.setVr_V_SNo(DmShared.xNull(rsTemp.getString("v_SNo")));
+                node.setSupplierTag(DmShared.xNull(rsTemp.getString("supplierCode")));
+                node.setRefNo(DmShared.xNull(rsTemp.getString("refNo")));
+                node.setSupplierText(DmShared.xNull(rsTemp.getString("supplierName")));
+                node.setContraAC(DmShared.xNull(rsTemp.getString("contraAc")));
+                node.setVoucherType(DmShared.xNull(rsTemp.getString("voucherType")));
+                node.setAmtcr(DmShared.xNull(rsTemp.getString("amtCr")));
+                node.setAdjAmt(DmShared.xNull(rsTemp.getString("adjAmt")));
+                node.setPendingAdjustment(DmShared.xNull(rsTemp.getString("pendingAdjustment")));
+
+                lstNode.add(node);
+            }
+            rsTemp.close();
+            psTemp.close();
+
+            cnTemp.close();
+            dmrTemp.setStatus(true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            dmrTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return dmrTemp;
+    }
+
+    @Override
+    public String[] getServerDateTime() {
+        String[] dateTime, returnValue;
+
+        dateTime = DmServer.getServerDateTime();
+        returnValue = new String[3];
+        returnValue[0] = dateTime[0];
+        returnValue[1] = dateTime[1];
+        returnValue[2] = UUID.randomUUID().toString();
+
+        return returnValue;
+    }
+
+    @Override
+    public DmResult<String> saveRecord(WholesaleBillSettlement_Mdl mrTemp, boolean isApprove) {
+        DmResult<String> dmrTemp = new DmResult();
+        Connection cnTemp = null;
+        DmPreparedStatement psTemp = null;
+        ResultSet rsTemp = null;
+        DmSavePoint spBegin = null;
+        String sqlQuery, vNo = "", voucherPrefix;
+        boolean blnAdd = false;
+        int vSNo = 0;
+        try {
+            WholesaleBillSettlement_Vld.chkSave(mrTemp);
+            voucherPrefix = DmServer.getSsnVoucherPrefix(this);
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+            spBegin = new DmSavePoint(cnTemp);
+
+            if (DmShared.xNull(mrTemp.getSharedKeyFieldCode()).equalsIgnoreCase("")) {
+                blnAdd = true;
+                mrTemp.setSharedKeyFieldCode(DmServer.getDocId(DmShared.xNull(mrTemp.getVoucherTypeTag()), voucherPrefix, cnTemp, this));
+                mrTemp.setRecId(DmServer.getRecId("ledgerM", "docId", DmShared.xNull(mrTemp.getSharedKeyFieldCode()), "recId", mrTemp.getRecId(), mrTemp.getV_Date(), DmShared.xNull(mrTemp.getVoucherTypeTag()), voucherPrefix, cnTemp, this, true));
+                mrTemp.setSharedKeyFieldName(DmShared.xNull(mrTemp.getRecId().getRecIdValue()));
+            }
+
+            if (blnAdd) {
+
+                sqlQuery = "Insert Into LedgerM (DocId,V_Type,V_Prefix,Site_Code, V_No, V_Date,SubCode,"
+                        + " Narration,RecId, recIdPrefix, U_EntDt,PreparedBy,remark) "
+                        + "Values (:DocId,:V_Type,:V_Prefix,:Site_Code, :V_No, :V_Date,:SubCode,:Narration,:RecId,"
+                        + " :recIdPrefix, :uEntDt,"
+                        + " :preparedBy,:remark)";
+                psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                psTemp.setString("DocId", mrTemp.getSharedKeyFieldCode());
+                psTemp.setString("RecId", mrTemp.getSharedKeyFieldName());
+                psTemp.setString("V_Type", mrTemp.getVoucherTypeTag());
+                psTemp.setString("V_Prefix", DmServer.getSsnVoucherPrefix(this));
+                psTemp.setString("Site_Code", DmServer.getSsnSiteCode(this));
+                psTemp.setString("recIdPrefix", DmShared.xNull(mrTemp.getRecId().getPrefix()));
+                psTemp.setString("V_No", mrTemp.getRecId().getCounter().toString());
+                psTemp.setDate("V_Date", DmServer.convertDate(mrTemp.getV_Date()));
+                psTemp.setString("SubCode", DmShared.foriegnKey(mrTemp.getSupplierTag()));
+                psTemp.setString("Narration", "");
+                psTemp.setString("preparedBy", DmServer.getSsnUserName(this));
+                psTemp.setTimestamp("uEntDt", DmServer.getServerTimestamp());
+                psTemp.setString("remark", DmShared.xNull(mrTemp.getRemark()));
+            } else {
+
+                sqlQuery = "update LedgerM Set "
+                        + "V_Date=:V_Date,"
+                        + "SubCode=:SubCode,"
+                        + "Narration=:Narration,"
+                        + "transferDt=:transferDt,"
+                        + "U_Name=:uName,"
+                        + "remark=:remark, "
+                        + "U_EntDt=:uEntDt "
+                        + "Where DocId=:DocId ";
+                psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                psTemp.setDate("V_Date", DmServer.convertDate(mrTemp.getV_Date()));
+                psTemp.setString("SubCode", DmShared.foriegnKey(mrTemp.getAccountNameCode()));
+                psTemp.setString("Narration", "");
+                psTemp.setString("transferDt", null);
+                psTemp.setString("uName", DmServer.getSsnUserName(this));
+                psTemp.setTimestamp("uEntDt", DmServer.getServerTimestamp());
+                psTemp.setString("DocId", mrTemp.getSharedKeyFieldCode());
+                psTemp.setString("remark", DmShared.xNull(mrTemp.getRemark()));
+            }
+            psTemp.executeUpdate();
+            psTemp.close();
+
+//            for (int i = 0; i < 2; i++) {
+//                if (!DmShared.xNull(mrTemp.getSharedKeyFieldCode()).equalsIgnoreCase("")) {
+//                    vSNo++;
+//
+//                    sqlQuery = "Insert Into Ledger (DocId, RecId, recIdPrefix, V_No, V_SNo,V_Date,SubCode,ContraSub,AmtDr,AmtCr,"
+//                            + "V_Type,V_Prefix,Site_Code,"
+//                            + "u_Name,u_EntDt) "
+//                            + "Values(:DocId,:RecId, :recIdPrefix, :V_No,:V_SNo,:V_Date,:SubCode,:ContraSub,:AmtDr,:AmtCr,"
+//                            + ":V_Type,:V_Prefix,:Site_Code,"
+//                            + ":u_Name,:u_EntDt)";
+//                    psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+//                    psTemp.setString("DocId", mrTemp.getSharedKeyFieldCode());
+//                    psTemp.setString("RecId", mrTemp.getSharedKeyFieldName());
+//                    psTemp.setString("recIdPrefix", DmShared.xNull(mrTemp.getRecId().getPrefix()));
+//                    psTemp.setString("V_No", mrTemp.getRecId().getCounter().toString());
+//                    psTemp.setString("V_SNo", DmServer.vNull(vSNo, "0"));
+//                    psTemp.setDate("V_Date", DmServer.convertDate(mrTemp.getV_Date()));
+//                    if (i == 0) {
+//                        psTemp.setString("SubCode", DmShared.foriegnKey(mrTemp.getAccountNameCode()));
+//                        psTemp.setString("ContraSub", DmShared.foriegnKey(mrTemp.getSupplierTag()));
+//                        psTemp.setString("AmtDr", "0.00");
+//                        psTemp.setString("AmtCr", DmServer.vNull(mrTemp.getCreditAmt(), "0.00"));
+//                    } else {
+//                        psTemp.setString("SubCode", DmShared.foriegnKey(mrTemp.getSupplierTag()));
+//                        psTemp.setString("ContraSub", DmShared.foriegnKey(mrTemp.getAccountNameCode()));
+//                        psTemp.setString("AmtDr", DmServer.vNull(mrTemp.getCreditAmt(), "0.00"));
+//                        psTemp.setString("AmtCr", "0.00");
+//                    }
+//                    psTemp.setString("V_Type", mrTemp.getVoucherTypeTag());
+//                    psTemp.setString("V_Prefix", voucherPrefix);
+//                    psTemp.setString("Site_Code", DmServer.getSsnSiteCode(this));
+//
+//                    psTemp.setString("u_Name", DmServer.getSsnUserName(this));
+//                    psTemp.setTimestamp("u_EntDt", DmServer.getServerTimestamp());
+//                    psTemp.executeUpdate();
+//                    psTemp.close();
+//                }
+//            }
+            /*==============================<< Delete record from ladgerAdj >>===============================*/
+            if (blnAdd) {
+                sqlQuery = " Delete From ledgerAdj Where finPayDocId= :docId ";
+                psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                psTemp.setString("docId", DmShared.iNull(mrTemp.getSharedKeyFieldCode()).toString());
+                psTemp.executeUpdate();
+                psTemp.close();
+
+                for (Map.Entry<String, List<HashMap<String, LedgerAdj_Mdl>>> entry : mrTemp.getListHmMain().entrySet()) {
+                    String vr_DocId = entry.getKey();
+                    List<HashMap<String, LedgerAdj_Mdl>> listOfMaps = entry.getValue();
+                    for (HashMap<String, LedgerAdj_Mdl> innerMap : listOfMaps) {
+                        for (Map.Entry<String, LedgerAdj_Mdl> innerEntry : innerMap.entrySet()) {
+                            String adj_DocId = innerEntry.getKey();
+                            LedgerAdj_Mdl ledgerMdlValue = innerEntry.getValue();
+                            if (DmShared.vNull(ledgerMdlValue.getAdjustment()) != 0) {
+                                sqlQuery = "INSERT INTO ledgerAdj (vr_DocId, vr_V_SNo, vr_SubCode, vr_V_Date, adj_DocId, adj_V_SNo, adj_SubCode, adj_V_Date, adjustment,finPayDocId)"
+                                        + " VALUES (:vr_DocId, :vr_V_SNo, :vr_SubCode, :vr_V_Date, :adj_DocId, :adj_V_SNo, :adj_SubCode, :adj_V_Date, :adjustment,:finPayDocId)";
+                                psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                                psTemp.setString("vr_DocId", DmShared.foriegnKey(vr_DocId));
+                                psTemp.setString("vr_V_SNo", DmShared.foriegnKey(ledgerMdlValue.getVr_V_SNo()));
+                                psTemp.setString("vr_SubCode", DmShared.foriegnKey(mrTemp.getSupplierTag()));
+                                psTemp.setDate("vr_V_Date", DmServer.convertDate(mrTemp.getV_Date()));
+                                psTemp.setString("adj_DocId", DmShared.foriegnKey(adj_DocId));
+                                psTemp.setString("adj_V_SNo", DmShared.foriegnKey(DmShared.xNull(ledgerMdlValue.getAdj_V_SNo())));
+                                psTemp.setString("adj_SubCode", DmShared.foriegnKey(mrTemp.getSupplierTag()));
+                                psTemp.setDate("adj_V_Date", DmServer.convertDate(mrTemp.getV_Date()));
+                                double adjustment = DmShared.vNull(ledgerMdlValue.getAdjustment());
+                                psTemp.setString("adjustment", DmServer.vNull(-adjustment));
+                                psTemp.setString("finPayDocId", mrTemp.getSharedKeyFieldCode());
+                                psTemp.executeUpdate();
+                                psTemp.close();
+                            }
+                        }
+                    }
+                }
+            }
+
+            dmrTemp.setData(mrTemp.getSharedKeyFieldCode());
+            spBegin.commit();
+            cnTemp.close();
+            dmrTemp.setStatus(true);
+
+        } catch (Exception e) {
+            try {
+                if (spBegin != null) {
+                    spBegin.rollBack();
+                }
+            } catch (Exception ex) {
+            }
+            dmrTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return dmrTemp;
+    }
+
+    @Override
+    public DmResult<WholesaleBillSettlement_Mdl> getMoveRec(String strKey) {
+        DmResult<WholesaleBillSettlement_Mdl> dmrTemp = new DmResult();
+        Connection cnTemp = null;
+        DmPreparedStatement psTemp = null;
+        ResultSet rsTemp = null;
+        String sqlQuery;
+        WholesaleBillSettlement_Mdl mrTemp = new WholesaleBillSettlement_Mdl();
+        GrdPendingFPReqDetail_Mdl drNode;
+        GridDrAdjustBills_Mdl crNode;
+        dmrTemp.setData(mrTemp);
+
+        try {
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+
+            /*====================================< Get LedgerM Detail >====================================*/
+            sqlQuery = "select lam.docId , lam.recId , lam.v_Date , lam.subcode as supplierCode,sg.name as supllieName,\n"
+                    + "vt.description, vt.v_type,lam.PreparedBy,lam.approvedBy\n"
+                    + "from ledgerM lam\n"
+                    + "left join voucher_Type vt on vt.v_Type = lam.v_Type\n"
+                    + "left join subGroup sg on sg.subCode  =  lam.subcode\n"
+                    + "where lam.docId = :docid  ";
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+            psTemp.setLong("docid", DmShared.iNull(strKey).longValue());
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                mrTemp.setSharedKeyFieldCode(DmShared.xNull(rsTemp.getString("docId")));
+                mrTemp.setSharedKeyFieldName(DmShared.xNull(rsTemp.getString("recId")));
+                mrTemp.setV_Date(DmShared.dNull(rsTemp.getDate("v_Date")));
+                mrTemp.setSupplierText(DmShared.xNull(rsTemp.getString("supllieName")));
+                mrTemp.setSupplierTag(DmShared.xNull(rsTemp.getString("supplierCode")));
+                mrTemp.setVoucherTypeText(DmShared.xNull(rsTemp.getString("description")));
+                mrTemp.setVoucherTypeTag(DmShared.xNull(rsTemp.getString("v_type")));
+                mrTemp.setSharedPreparedBy(DmShared.xNull(rsTemp.getString("PreparedBy")));
+                mrTemp.setApprovedBy(DmShared.xNull(rsTemp.getString("approvedBy")));
+
+            }
+            psTemp.close();
+            rsTemp.close();
+
+            /*====================================< Get SaleBills Detail >====================================*/
+            sqlQuery = " select\n"
+                    + "la.adj_docId as sbdocId,max(la.adj_V_SNo) as lgV_SNo,max(lg.recId) as sbrecId, max(lg.v_Date) as voucherDate,\n"
+                    + "max(vt.short_Name) as shortName,max(lg.refNo) as partyBillNo,\n"
+                    + "abs(sum(la.adjustment)) as billAmount\n"
+                    + "from ledgeradj la\n"
+                    + "left join ledger lg on lg.docId  = la.adj_DocId and lg.v_SNo = la.adj_V_SNo \n"
+                    + "left join voucher_Type vt on vt.v_type = lg.v_Type\n"
+                    + "where ISNULL(vt.category, '') <> 'WSBSM' \n"
+                    + "and la.finPayDocId = :docid \n"
+                    + "group by la.adj_docId ";
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+            psTemp.setLong("docid", DmShared.iNull(strKey).longValue());
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                drNode = new GrdPendingFPReqDetail_Mdl();
+                drNode.setSharedKeyFieldCode(DmShared.xNull(rsTemp.getString("sbdocId")));
+                drNode.setSharedKeyFieldName(DmShared.xNull(rsTemp.getString("sbrecId")));
+                drNode.setVoucherDate(DmShared.dNull(rsTemp.getDate("voucherDate")));
+                drNode.setLgV_SNo(DmShared.xNull(rsTemp.getString("lgV_SNo")));
+                drNode.setVoucherType(DmShared.xNull(rsTemp.getString("shortName")));
+                drNode.setPartyBillNo(DmShared.xNull(rsTemp.getString("partyBillNo")));
+//                drNode.setDebtorName(DmShared.xNull(rsTemp.getString("debtorName")));
+//                drNode.setDebtorCode(DmShared.xNull(rsTemp.getString("debtorCode")));
+                drNode.setBillAmountAmt(DmServer.vNull(rsTemp.getString("billAmount"), "0.00"));
+//                drNode.setAdjustedAmt(DmServer.vNull(rsTemp.getString("adjustmentAmt"), "0.00"));
+                drNode.setChecked("1");
+                mrTemp.getLstPendingFPayReq().add(drNode);
+
+            }
+            psTemp.close();
+            rsTemp.close();
+
+            /*====================================< Get saleBills Return Detail >====================================*/
+            sqlQuery = "select la.vr_DocId,la.vr_V_SNo,la.vr_SubCode,la.vr_V_Date,la.adj_DocId\n"
+                    + "   ,la.adj_SubCode,la.adj_V_Date,la.adj_V_SNo\n"
+                    + "  ,abs(la.adjustment) AS adjustmentAmount\n"
+                    + " ,lg.recId As billRecId\n"
+                    + " ,vt.short_Name AS voucherType\n"
+                    + " from ledgeradj la\n"
+                    + "left join ledger lg on lg.docId  = la.vr_DocId and lg.v_SNo = la.vr_V_SNo \n"
+                    + "left join voucher_Type vt on vt.v_type = lg.v_Type\n"
+                    + "where ISNULL(vt.category, '') <> 'WSBSM' "
+                    + "and la.finPayDocId = :docid";
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+            psTemp.setLong("docid", DmShared.iNull(strKey).longValue());
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                crNode = new GridDrAdjustBills_Mdl();
+                crNode.setSharedKeyFieldCode(DmShared.xNull(rsTemp.getString("vr_DocId")));
+                crNode.setSharedKeyFieldName(DmShared.xNull(rsTemp.getString("billRecId")));
+                crNode.setVr_V_SNo(DmShared.xNull(rsTemp.getString("vr_V_SNo")));
+                crNode.setAdj_V_SNo(DmShared.xNull(rsTemp.getString("adj_V_SNo")));
+                crNode.setSupplierTag(DmShared.xNull(rsTemp.getString("vr_SubCode")));
+                crNode.setVoucherDate(DmShared.dNull(rsTemp.getDate("vr_V_Date")));
+//                crNode.setSharedPreparedBy(DmShared.xNull(rsTemp.getString("adj_DocId")));
+                crNode.setVoucherType(DmShared.xNull(rsTemp.getString("voucherType")));
+                crNode.setPendingAdjustment(DmServer.vNull(rsTemp.getString("adjustmentAmount"), "0.00"));
+                crNode.setChecked("1");
+
+                mrTemp.getLstdrAdjustAmt().add(crNode);
+            }
+            psTemp.close();
+            rsTemp.close();
+
+            cnTemp.close();
+            dmrTemp.setData(mrTemp);
+            dmrTemp.setStatus(true);
+        } catch (SQLException | DmException e) {
+            dmrTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return dmrTemp;
+    }
+
+    @Override
+    public DmResult<List<KeyFieldExtended>> getNavigator(UserPermission userPermission) {
+        DmResult<List<KeyFieldExtended>> dmrTemp = new DmResult();
+        DmPreparedStatement psTemp = null;
+        Connection cnTemp = null;
+        ResultSet rsTemp = null;
+        List<KeyFieldExtended> lstNavigator = new ArrayList<>();
+        KeyFieldExtended lstNavigatorTmp;
+        dmrTemp.setData(lstNavigator);
+
+        try {
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, "select lgm.docId "
+                    + "                        from ledgerM lgm "
+                    + "                   	left join voucher_Type as vt on lgm.v_Type = vt.v_Type "
+                    + "                         where lgm.site_code=:site_code and vt.category = " + vCat1 + ""
+                    + "                   	Order by  lgm.v_Date,  lgm.v_No, lgm.recId ");
+            psTemp.setString("site_Code", DmShared.iNull(DmServer.getSsnSiteCode(this)).toString());
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                lstNavigatorTmp = new KeyFieldExtended();
+                lstNavigatorTmp.setSharedKeyFieldCode(DmShared.xNull(rsTemp.getString("docId")));
+                lstNavigator.add(lstNavigatorTmp);
+            }
+            dmrTemp.setStatus(true);
+            rsTemp.close();
+            psTemp.close();
+            cnTemp.close();
+        } catch (Exception e) {
+            dmrTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return dmrTemp;
+    }
+
+    @Override
+    public DmResultPageing<List<Find_Mdl>> getFind(UserPermission userPermission, DmHelper helper, boolean blnToEndOfFile) {
+        DmResultPageing<List<Find_Mdl>> rstTemp = new DmResultPageing<>();
+        List<Find_Mdl> lstTemp = new ArrayList<>();
+        Find_Mdl listNode;
+        Connection cnTemp = null;
+        ResultSet rsTemp = null;
+        DmPreparedStatement psTemp = null;
+        DmSQLWithParam sqlWithParam = new DmSQLWithParam();
+        String sqlQuery;
+        rstTemp.setData(lstTemp);
+        try {
+
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+
+            sqlQuery = " Select lgm.docid ,max(lgm.recid) as recid ,max(lgm.v_No) as v_No , max(lgm.v_date) as date ,\n"
+                    + "  max(sg.name) as supplierName,\n"
+                    + "  max(lgm.remark) as remark , sum(abs(v1.adjustmentAmt)) as finalAmt, \n"
+                    + "  max(sg.subcode) as subcode, max(sg.name) as acName,  \n"
+                    + "  max(sg.nature) as acNature,MAX(lgm.approvedBy) as approvedBy\n"
+                    + "  from ledgerM lgm  \n"
+                    + "    LEFT JOIN voucher_Type AS vt ON lgm.v_Type = vt.v_Type \n"
+                    + "	left join subGroup sg On lgm.subcode = sg.subCode \n"
+                    + "	left join (\n"
+                    + "   select la.finPayDocId , la.adjustment as adjustmentAmt\n"
+                    + "   from ledgerAdj la\n"
+                    + "   ) as v1 on v1.finPayDocId = lgm.docId \n"
+                    + "	  WHERE vt.category in (" + vCat1 + ")  \n"
+                    + "	  AND lgm.site_Code = :site_Code \n"
+                    + "	  AND lgm.v_prefix = :vPrefix \n"
+                    + "	  group by lgm.docid \n";
+
+            sqlWithParam.setSQL(sqlQuery);
+            sqlWithParam.setString("site_Code", DmServer.getSsnSiteCode(this));
+            sqlWithParam.setString("vPrefix", DmServer.getSsnVoucherPrefix(this));
+            psTemp = DmServer.evaluateHelper(helper, sqlWithParam, cnTemp, blnToEndOfFile, this);
+            rsTemp = psTemp.executeQuery();
+            while (rsTemp.next()) {
+                listNode = new Find_Mdl();
+                listNode.setSharedKeyFieldCode(DmShared.iNull(rsTemp.getString("docId")).toString());
+                listNode.setSharedKeyFieldName(DmShared.xNull(rsTemp.getString("recid")));
+                listNode.setSupplier(DmShared.xNull(rsTemp.getString("supplierName")));
+                listNode.setRemark(DmShared.xNull(rsTemp.getString("remark")));
+                listNode.setPayDate(DmShared.xNull(rsTemp.getString("date")));
+                listNode.setOrgAmt(DmServer.vNull(rsTemp.getString("finalAmt"), "0.00"));
+                listNode.setApprovedBy(DmShared.xNull(rsTemp.getString("approvedBy")));
+                lstTemp.add(listNode);
+            }
+            helper.positioning(lstTemp.size(), blnToEndOfFile);
+            rstTemp.setPaging(helper.getPaging());
+            rstTemp.setStatus(true);
+            rsTemp.close();
+            psTemp.close();
+            cnTemp.close();
+        } catch (Exception e) {
+            rstTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return rstTemp;
+    }
+
+    @Override
+    public DmResult<String> deleteRecord(String strKey) {
+        DmResult<String> dmrTemp = new DmResult();
+        Connection cnTemp = null;
+        DmPreparedStatement psTemp = null;
+        DmSavePoint spBegin = null;
+        String sqlQuery;
+        ResultSet rsTemp = null;
+        dmrTemp.setData(strKey);
+
+        try {
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+            spBegin = new DmSavePoint(cnTemp);
+            sqlQuery = "select approvedBy  FROM ledgerM WHERE  docId = :docId ";
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+            psTemp.setString("docId", DmShared.iNull(strKey).toString());
+            rsTemp = psTemp.executeQuery();
+            if (rsTemp.next()) {
+
+                if (!DmShared.xNull(rsTemp.getString("approvedBy")).equalsIgnoreCase("")) {
+                    throw new DmException(0, "Record is approved. You can't delete this record.");
+                }
+            }
+            rsTemp.close();
+            psTemp.close();
+
+            /*==============================<< Delete record from ledgerM >>===============================*/
+            sqlQuery = " Delete From ledgerM Where docId= :docId ";
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+            psTemp.setString("docId", DmShared.iNull(strKey).toString());
+            psTemp.executeUpdate();
+            psTemp.close();
+
+            /*==============================<< Delete record from ledgerAdj >>===============================*/
+            sqlQuery = " Delete From ledgerAdj Where finPayDocId= :docId ";
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+            psTemp.setString("docId", DmShared.iNull(strKey).toString());
+            psTemp.executeUpdate();
+            psTemp.close();
+
+            spBegin.commit();
+            cnTemp.close();
+            dmrTemp.setStatus(true);
+        } catch (Exception e) {
+            try {
+                if (spBegin != null) {
+                    spBegin.rollBack();
+                }
+                if (e instanceof DmException) {
+                    dmrTemp.setErrorNumber(((DmException) e).getErrorNo());
+                    dmrTemp.setValue1(((DmException) e).getErrorSource());
+                    dmrTemp.setValue2(((DmException) e).getErrorSourceCode());
+                }
+            } catch (Exception ex) {
+                dmrTemp.setErrorMessage(DmShared.xNull(ex.getMessage()));
+            }
+            dmrTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return dmrTemp;
+    }
+
+    @Override
+    public DmResult<String> setApproval(String approvedBy, boolean isApprove, String docId) {
+        DmResult<String> dmrTemp = new DmResult();
+        Connection cnTemp = null;
+        DmSavePoint spBegin = null;
+        dmrTemp.setData("");
+
+        try {
+            cnTemp = DmServer.getConnection(DmServer.getSsnDBName(this));
+
+            spBegin = new DmSavePoint(cnTemp);
+
+            if (isApprove) {
+                documentApproval(WalkThroughEnum.ACCEPT, docId, approvedBy, cnTemp);
+            } else {
+                documentApproval(WalkThroughEnum.DECLINE, docId, approvedBy, cnTemp);
+            }
+            dmrTemp.setData(docId);
+
+            spBegin.commit();
+            cnTemp.close();
+            dmrTemp.setStatus(true);
+        } catch (Exception e) {
+            try {
+                if (spBegin != null) {
+                    spBegin.rollBack();
+                }
+            } catch (Exception ex) {
+            }
+            dmrTemp.setErrorMessage(DmShared.xNull(e.getMessage()));
+        } finally {
+            try {
+                if (cnTemp != null && !cnTemp.isClosed()) {
+                    cnTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+        return dmrTemp;
+    }
+
+    private void documentApproval(WalkThroughEnum walkThroughMove, String keyCode, String userName, Connection cnTemp) throws Exception {
+        ResultSet rsTemp = null;
+        DmPreparedStatement psTemp = null;
+        String sqlQuery = "";
+
+        try {
+
+
+            /*==============================<< Check if document is in use >>====================================*/
+            sqlQuery = "select approvedBy,approvedDt,"
+                    + "(case when :userName IN (ISNULL(approvedBy,''),'SA','SUPER') then 1 else 0 end) canApprove "
+                    + "from ledgerM where docId = :docId ";
+            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            psTemp.setString("docId", DmShared.iNull(keyCode).toString());
+            psTemp.setString("userName", userName);
+            rsTemp = psTemp.executeQuery();
+            if (rsTemp.next()) {
+                if (walkThroughMove == WalkThroughEnum.ACCEPT) {
+                    if (DmShared.xNull(rsTemp.getString("approvedBy")).trim().equalsIgnoreCase("")) {
+
+                        rsTemp.updateString("approvedBy", DmShared.xNull(userName).trim());
+                        rsTemp.updateTimestamp("approvedDt", new Timestamp(new java.util.Date().getTime()));
+                        rsTemp.updateRow();
+                        rsTemp.close();
+                        psTemp.close();
+
+                        sqlQuery = " Update ledgerM set "
+                                + " u_EntDt=:u_EntDt "
+                                + " where docId=:docId ";
+                        psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                        psTemp.setString("docId", DmShared.xNull(keyCode));
+                        psTemp.setTimestamp("u_EntDt", DmServer.getServerTimestamp());
+                        psTemp.executeUpdate();
+                        psTemp.close();
+
+                        sqlQuery = " Update ledgerM set "
+                                + " approvedBy=:approvedBy, "
+                                + " approvedDt=:approvedDt  "
+                                + " where docId=:docId ";
+                        psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                        psTemp.setString("docId", DmShared.xNull(keyCode));
+                        psTemp.setString("approvedBy", DmShared.xNull(userName).trim());
+                        psTemp.setTimestamp("approvedDt", DmServer.getServerTimestamp());
+                        psTemp.executeUpdate();
+                        psTemp.close();
+
+                        sqlQuery = "Update Ledger Set "
+                                + "isPosted = 1 "
+                                + "Where DocId = :DocId ";
+                        psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                        psTemp.setString("DocId", keyCode);
+                        psTemp.executeUpdate();
+                        psTemp.close();
+
+                    } else {
+                        throw new Exception("Document already approved.");
+                    }
+                } else {
+                    if (!DmShared.xNull(rsTemp.getString("approvedBy")).trim().equalsIgnoreCase("")) {
+                        if (DmShared.iNull(rsTemp.getString("canApprove")).longValue() == 1) {
+
+                            rsTemp.updateString("approvedBy", null);
+                            rsTemp.updateDate("approvedDt", null);
+                            rsTemp.updateRow();
+                            rsTemp.close();
+                            psTemp.close();
+
+                            sqlQuery = " Update ledgerM set "
+                                    + " u_EntDt=:u_EntDt "
+                                    + " where docId=:docId ";
+                            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                            psTemp.setString("docId", DmShared.iNull(keyCode).toString());
+                            psTemp.setTimestamp("u_EntDt", DmServer.getServerTimestamp());
+                            psTemp.executeUpdate();
+                            psTemp.close();
+
+                            sqlQuery = " Update ledgerM set "
+                                    + " approvedBy=:approvedBy, "
+                                    + " approvedDt=:approvedDt  "
+                                    + " where docId=:docId ";
+                            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                            psTemp.setString("docId", DmShared.xNull(keyCode));
+                            psTemp.setString("approvedBy", null);
+                            psTemp.setTimestamp("approvedDt", null);
+                            psTemp.executeUpdate();
+                            psTemp.close();
+
+                            sqlQuery = "Update Ledger Set "
+                                    + "isPosted = 0 "
+                                    + "Where DocId = :DocId ";
+                            psTemp = DmPreparedStatement.prepareStatement(cnTemp, sqlQuery);
+                            psTemp.setString("DocId", keyCode);
+                            psTemp.executeUpdate();
+                            psTemp.close();
+
+                        } else {
+                            throw new Exception("Unauthorized user to unapprove.");
+                        }
+
+                    } else {
+                        throw new Exception("Document already unapproved.");
+                    }
+                }
+            }
+            rsTemp.close();
+            psTemp.close();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                if (rsTemp != null) {
+                    rsTemp.close();
+                }
+                if (psTemp != null) {
+                    psTemp.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+    }
+}

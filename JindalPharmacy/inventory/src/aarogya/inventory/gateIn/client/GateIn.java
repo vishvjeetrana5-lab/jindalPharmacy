@@ -1,0 +1,1125 @@
+package aarogya.inventory.gateIn.client;
+
+import aarogya.inventory.gateIn.shared.*;
+import aarogya.inventory.gateOutSearch.client.GateOutSearch;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.RowClickEvent;
+import dataman.dmBase.dmBaseStatic.client.DmRootEvent;
+import dataman.dmBase.dmBaseStatic.client.DmRootEvents;
+import dataman.dmBase.self.shared.DmCallBack;
+import dataman.dmBase.self.shared.DmException;
+import dataman.dmBase.self.shared.DmHelper;
+import dataman.dmBase.self.shared.DmReportProperty_Mdl;
+import dataman.dmBase.self.shared.DmResult;
+import dataman.dmBase.self.shared.DmResultPageing;
+import dataman.dmBase.self.shared.FieldUDT_Mdl;
+import dataman.dmBase.self.shared.KeyFieldExtended;
+import dataman.dmBase.self.shared.ServiceInvoker;
+import dataman.dmBase.self.shared.SetWidgetInvoker;
+import dataman.dmBase.self.shared.UserMenu;
+import dataman.dmBase.self.shared.VoucherPermissionHandler;
+import dataman.dmToolkit.dmFind.client.DmFind;
+import dataman.dmToolkit.dmMessageBox.client.DmAlertMessageBox;
+import dataman.dmToolkit.dmMessageBox.client.DmConfirmMessageBox;
+import dataman.dmToolkit.dmStatic.client.DmClient;
+import dataman.dmToolkit.dmStatic.shared.DmShared;
+import dataman.dmToolkit.dmTextBox.client.DmTextBox;
+import dataman.dmToolkit.dmTextHelp.client.DmTextHelp;
+import dataman.dmToolkit.dmTopControl.client.DmTopControl;
+import dataman.dmToolkit.openSourceReport.client.OpenSourceReport;
+import java.util.HashMap;
+import java.util.List;
+
+import aarogya.projectMenu.self.shared.ProjectVoucherCategory;
+import aarogya.selfToolkit.modifyReason.client.ModifyReason;
+import aarogya.selfToolkit.modifyReason.shared.ModifyReason_Mdl;
+import aarogya.selfToolkit.stStatic.shared.STEnum;
+
+public class GateIn extends GateIn_Dsg implements BlurHandler, ClickHandler, DmRootEvents, AttachEvent.Handler {
+
+    private final ServiceInvoker<GateIn_SrvAsync> srvAsync;
+    String voucherCategory;
+    String selectedSupplierCode;
+    String partyType, vNo = "", recIdPrefix = "";
+    private Boolean dateTimeEditable = false;
+    private DmCallBack cardCallBack = null;
+    String cardActionNature = "";
+    ModifyReason_Mdl modifyReasonMdl;
+    final ModifyReason modifyReason = new ModifyReason();
+    private boolean gateOutFlag = false;
+    private Default_Mdl defaultValue = new Default_Mdl();
+    private final GateInGridEdit<GateIn_Mdl, Grd_PrpAcs> gateGridEdit = new GateInGridEdit(grdGateDetail);
+    private final GateOutSearch gatepassOutSearch = new GateOutSearch();
+    GateInGridEdit_Mdl deleteGateInGridEdit = new GateInGridEdit_Mdl();
+
+    public GateIn(UserMenu menuPermission, SetWidgetInvoker swi) {
+        super();
+        this.asWidget().setTitle(widgetName);
+        srvAsync = new ServiceInvoker<GateIn_SrvAsync>(GWT.create(GateIn_Srv.class), GateIn.class.getName());
+        textHelpEvents();
+        topControlEvents(menuPermission);
+        findEvents();
+        gridEvents();
+        manageEvents();
+        iniDefaultValues(swi);
+    }
+
+    private void onAdd() {
+        clear();
+        manageDisplay(true);
+        setDefaultValues();
+        txtHType.setFocus(true);
+        grdGateDetail.getGrid().getStore().add(new GateInGridEdit_Mdl());
+    }
+
+    private void topControlEvents(UserMenu menuPermission) {
+        topControl.setTitle(this.asWidget().getTitle());
+
+        topControl.setOtherRequired(false);
+
+        topControl.setRefreshRequired(false);
+        topControl.setDeleteCaptionToDiscard();
+
+        for (String controlPermission : menuPermission.getControlPermission()) {
+            if (DmShared.xNull(controlPermission).equalsIgnoreCase(dateTimeEditableBlog)) {
+                dateTimeEditable = true;
+            } else if (DmShared.xNull(controlPermission).equalsIgnoreCase(gateOutByBlog)) {
+            }
+        }
+
+        topControl.setUserPermission(menuPermission, new VoucherPermissionHandler(DmClient.getVoucherPermission(new String[]{new ProjectVoucherCategory().GATE})) {
+
+            @Override
+            public String getVoucherType() {
+                return txtHVoucherType.getTag();
+            }
+
+            @Override
+            public String getVoucherDate() {
+                return txtPassInDate.getText();
+            }
+
+            @Override
+            public String getVoucherValue() {
+                return "";
+            }
+        });
+
+        topControl.addNewHandeller(new DmTopControl.eNew() {
+            @Override
+            public void newClicked() {
+                onAdd();
+            }
+        });
+
+        topControl.addEditHandeller(new DmTopControl.eEdit() {
+            @Override
+            public void editClicked() {
+                srvAsync.invokeRPC().ifDocumentUsed(topControl.getDocId(), new AsyncCallback<DmResult<Boolean>>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+
+                    @Override
+                    public void onSuccess(DmResult<Boolean> result) {
+                        if (result.getData()) {
+                            topControl.btnClick("");
+                            new DmAlertMessageBox("Entry has been used, can't edit/delete.", (DmTextBox) null).show();
+                        } else {
+                            manageDisplay(true);
+                            grdGateDetail.getGrid().getStore().add(new GateInGridEdit_Mdl());
+                            txtHType.setFocus(true);
+                        }
+                    }
+                });
+            }
+        });
+
+        topControl.addDeleteHandeller(new DmTopControl.eDelete() {
+            @Override
+            public void deleteClicked() {
+                srvAsync.invokeRPC().ifDocumentUsed(topControl.getDocId(), new AsyncCallback<DmResult<Boolean>>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+
+                    @Override
+                    public void onSuccess(DmResult<Boolean> result) {
+                        if (result.getData()) {
+                            topControl.btnClick("");
+                            new DmAlertMessageBox("Entry has been used, can't edit/delete.", (DmTextBox) null).show();
+                        } else {
+                            if (DmShared.xNull(lblDiscard.getText()).equalsIgnoreCase("Discarded")) {
+                                new DmAlertMessageBox("Record is already discarded.", (DmTextBox) null).show();
+                                return;
+                            }
+                            new DmConfirmMessageBox("Are you sure? You want to discard this record.", new DialogHideEvent.DialogHideHandler() {
+
+                                @Override
+                                public void onDialogHide(DialogHideEvent event) {
+                                    if (event.getHideButton() == Dialog.PredefinedButton.YES) {
+//                                        topControlDelete(topControl.getDocId());
+                                        showModifyReason();
+                                    }
+                                }
+                            }).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        topControl.addCardHandeller(new DmTopControl.eCard() {
+            @Override
+            public void cardClicked() {
+                topControlCard();
+            }
+        });
+
+        topControl.addFindHandeller(new DmTopControl.eFind() {
+            @Override
+            public void findClicked() {
+                flwForm.remove(vrtInnerForm);
+                flwForm.add(dmFind);
+            }
+        });
+
+        topControl.addMoveRecHandeller(new DmTopControl.iMoveRec() {
+            @Override
+            public void moveRec(String strFetchCode) {
+                topControlMoveRec(strFetchCode);
+            }
+        });
+
+        topControl.addPrintHandeller(new DmTopControl.ePrint() {
+
+            @Override
+            public void printClicked() {
+                prnRecord(false);
+            }
+        });
+
+        topControl.addSaveHandeller(new DmTopControl.eSave() {
+            @Override
+            public void saveClicked() {
+                if (DmShared.xNull(lblDiscard.getText()).equalsIgnoreCase("Discarded")) {
+                    new DmAlertMessageBox("Record is already discarded.", (DmTextBox) null).show();
+                    return;
+                }
+                if (topControl.getMode().equalsIgnoreCase("New")) {
+                    topControlSave();
+                } else {
+                    showModifyReason();
+                }
+            }
+        });
+        topControl.addCloseHandeller(new DmTopControl.eClose() {
+            @Override
+            public void closeClicked() {
+                DmClient.<SetWidgetInvoker>getStoreItem("swiEvent").closeWidget(GateIn.this);
+            }
+        });
+
+        topControl.setDisplay(true);
+    }
+
+    private void showModifyReason() {
+        modifyReason.show(topControl.getMode(), topControl.getDocId());
+    }
+
+    private void resetGateIn(boolean isVisible) {
+
+        txtEstdDate.setText("");
+        grdGateDetail.getGrid().getStore().clear();
+        grdGateDetail.getGrid().getStore().add(new GateInGridEdit_Mdl());
+    }
+
+    private void fillItemDetails(List<KeyFieldExtended> listKF) {
+        srvAsync.invokeRPC().getItemDetail("", listKF, new AsyncCallback<DmResult<List<GateInGridEdit_Mdl>>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                new DmAlertMessageBox(caught.getMessage(), (DmTextBox) null).show();
+            }
+
+            @Override
+            public void onSuccess(DmResult<List<GateInGridEdit_Mdl>> result) {
+                if (result.isStatus()) {
+                    if (result.isStatus()) {
+                        grdGateDetail.getGrid().getStore().clear();
+                        grdGateDetail.getGrid().getStore().addAll(result.getData());
+                        grdGateDetail.getGrid().getStore().add(new GateInGridEdit_Mdl());
+
+                        manageItemDetails(false);
+
+                        txtHEmployeeName.setFocus(true);
+
+                    } else {
+                        new DmAlertMessageBox(result.getErrorMessage(), (DmTextBox) null).show();
+                    }
+                }
+            }
+        });
+    }
+
+    private void textHelpEvents() {
+        txtHDestination.addTextHelpCallBack(new DmTextHelp.TextHelpCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                srvAsync.invokeRPC(blnCallBackWait).getHRemark(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<KeyFieldExtended>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHDestination).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<KeyFieldExtended>> result) {
+                        if (result.isStatus()) {
+                            txtHDestination.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHDestination).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelectedRow(boolean blnStatus, KeyFieldExtended t1Row) {
+            }
+        });
+        gatepassOutSearch.addCallBack(new GateOutSearch.CallBack() {
+            @Override
+            public void ok(List<KeyFieldExtended> listKF) {
+                resetGateIn(true);
+                fillItemDetails(listKF);
+            }
+
+            @Override
+            public void close() {
+
+            }
+        });
+        txtHMode.addTextHelpCallBack(new DmTextHelp.TextHelpCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                srvAsync.invokeRPC(blnCallBackWait).getTxtHMode(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<KeyFieldExtended>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHMode).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<KeyFieldExtended>> result) {
+                        if (result.isStatus()) {
+                            txtHMode.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHMode).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelectedRow(boolean blnStatus, KeyFieldExtended t1Row) {
+            }
+        });
+
+        txtHPurpose.addTextHelpCallBack(new DmTextHelp.TextHelpCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                srvAsync.invokeRPC(blnCallBackWait).getTxtHPurpose(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<KeyFieldExtended>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHPurpose).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<KeyFieldExtended>> result) {
+                        if (result.isStatus()) {
+                            txtHPurpose.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHPurpose).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelectedRow(boolean blnStatus, KeyFieldExtended t1Row) {
+
+            }
+        });
+
+        txtHVoucherType.addTextHelpCallBack(new DmTextHelp.TextHelpCallBack<TxtHVoucher_mdl>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                srvAsync.invokeRPC(blnCallBackWait).getTxtHVoucher(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<TxtHVoucher_mdl>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHVoucherType).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<TxtHVoucher_mdl>> result) {
+                        if (result.isStatus()) {
+                            txtHVoucherType.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHVoucherType).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelectedRow(boolean blnStatus, TxtHVoucher_mdl t1Row) {
+                if (!DmShared.xNull(txtHVoucherType.getTag()).equalsIgnoreCase(DmShared.xNull(txtHVoucherType.getTag2nd()))) {
+                    txtHVoucherType.setTag2nd(txtHVoucherType.getTag());
+                    if (topControl.getMode().equalsIgnoreCase("New")) {
+
+                    }
+                    if (blnStatus && t1Row != null) {
+                        voucherCategory = t1Row.getVoucherCategory();
+
+                    }
+
+                }
+            }
+        });
+
+        txtHEmployeeName.addTextHelpCallBack(new DmTextHelp.TextHelpCallBack<TxtHPartyName_Mdl>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                srvAsync.invokeRPC(blnCallBackWait).getTxtHEmployeeName(voucherCategory, txtHVoucherType.getTag(), helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<TxtHPartyName_Mdl>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHEmployeeName).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<TxtHPartyName_Mdl>> result) {
+                        if (result.isStatus()) {
+                            txtHEmployeeName.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHEmployeeName).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelectedRow(boolean blnStatus, TxtHPartyName_Mdl tRow) {
+                if (!DmShared.xNull(selectedSupplierCode).equalsIgnoreCase(DmShared.xNull(txtHEmployeeName.getTag()))) {
+                    selectedSupplierCode = DmShared.xNull(txtHEmployeeName.getTag());
+                }
+                if (blnStatus && tRow != null) {
+                    txtHEmployeeName.setTag2nd(DmShared.xNull(tRow.getStateCode()));
+                    partyType = DmShared.xNull(tRow.getPartyType());
+
+                }
+            }
+        });
+
+        txtHDepartment.addTextHelpCallBack(new DmTextHelp.TextHelpCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                srvAsync.invokeRPC(blnCallBackWait).getTxtHDepartment(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<KeyFieldExtended>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHDepartment).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<KeyFieldExtended>> result) {
+                        if (result.isStatus()) {
+                            txtHDepartment.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHDepartment).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelectedRow(boolean blnStatus, KeyFieldExtended tRow) {
+            }
+        });
+
+        txtHType.addTextHelpCallBack(new DmTextHelp.TextHelpCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                srvAsync.invokeRPC(blnCallBackWait).getTxtHType(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<KeyFieldExtended>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHType).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<KeyFieldExtended>> result) {
+                        if (result.isStatus()) {
+                            txtHType.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHType).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelectedRow(boolean blnStatus, KeyFieldExtended t1Row) {
+                if (DmShared.iNull(STEnum.GateType.RETURNABLE.getId()).toString().equalsIgnoreCase(DmShared.xNull(txtHType.getTag()))) {
+                    gatepassOutSearch.show("", DmShared.dNull(txtPassInDate.getText()), new ProjectVoucherCategory().GATE_PASS_OUT);
+                } else {
+                    grdGateDetail.getGrid().getStore().clear();
+                    grdGateDetail.getGrid().getStore().add(new GateInGridEdit_Mdl());
+                    manageItemDetails(true);
+                }
+            }
+        });
+
+        modifyReason.addCallBack(new ModifyReason.CallBack() {
+
+            @Override
+            public void onOk(ModifyReason_Mdl modifyReason) {
+                modifyReasonMdl = modifyReason;
+                if (topControl.getMode().equalsIgnoreCase("Browse") && DmShared.iNull(topControl.getDocId()).longValue() > 0) {
+                    topControlDelete(topControl.getDocId());
+                } else {
+                    topControlSave();
+                }
+            }
+        });
+
+//        modifyReason.addCallBack(new ModifyReason.CallBack() {
+//
+//            @Override
+//            public void onOk(ModifyReason_Mdl modifyReason) {
+//                modifyReasonMdl = modifyReason;
+//                topControlSave();
+//            }
+//        });
+    }
+
+    private void manageEvents() {
+        txtPassInDate.addBlurHandler(this);
+        txtOutDate.addBlurHandler(this);
+        txtEstdDate.addBlurHandler(this);
+        txtSlipNo.addBlurHandler(this);
+        txtTareWeight.addBlurHandler(this);
+        txtGrossWeight.addBlurHandler(this);
+        txtNetWeight.addBlurHandler(this);
+
+        btnGateOutBy.addClickHandler(this);
+        btnSearchGateEntry.addClickHandler(this);
+        btnClockGateEntry.addClickHandler(this);
+        btnGateInDateTime.addClickHandler(this);
+        btnGateAdvice.addClickHandler(this);
+    }
+
+    private void topControlSave() {
+        GateIn_Mdl mrTemp;
+
+        try {
+
+            mrTemp = topControlSaveInitialize();
+            GateIn_Vld.chkSave(mrTemp);
+
+            srvAsync.invokeRPC().saveRecord(mrTemp, DmClient.getVoucherPrefix(), new AsyncCallback<DmResult<String>>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    new DmAlertMessageBox(caught.getMessage(), txtEntryNo).show();
+                }
+
+                @Override
+                public void onSuccess(DmResult<String> result) {
+                    if (result.isStatus()) {
+                        topControl.setDocId(result.getData());
+                        if (topControl.getMode().equalsIgnoreCase("New")) {
+                            topControl.btnClick("New");
+                        } else {
+                            topControlMoveRec(topControl.getDocId());
+                        }
+                    } else {
+                        topControlSaveError(result.getErrorNumber(), result.getValue1(), result.getValue2(), result.getErrorMessage());
+                    }
+                }
+            });
+        } catch (DmException e) {
+            topControlSaveError(e.getErrorNo(), e.getErrorSource(), e.getErrorSourceCode(), e.getMessage());
+        }
+    }
+
+    private GateIn_Mdl topControlSaveInitialize() {
+        GateIn_Mdl mrTemp = new GateIn_Mdl();
+
+        if (!topControl.getMode().equalsIgnoreCase("New")) {
+            mrTemp.setSharedKeyFieldCode(topControl.getDocId());
+
+            mrTemp.setSharedKeyFieldCode(topControl.getDocId());
+            mrTemp.getRecId().setRecIdValue(DmShared.xNull(txtEntryNo.getText()));
+            mrTemp.getRecId().setCounter(DmShared.iNull(vNo).longValue());
+            mrTemp.getRecId().setPrefix(DmShared.xNull(recIdPrefix));
+
+        }
+
+        mrTemp.setSharedKeyFieldName(DmShared.xNull(txtEntryNo.getText()).trim());
+        mrTemp.setU_EntDt_LatestLine(DmShared.xNull(txtEntryNo.getTag()));
+        mrTemp.setVoucherTypeCode(DmShared.xNull(txtHVoucherType.getTag()));
+        mrTemp.setDate(DmShared.dNull(txtPassInDate.getText()));
+        mrTemp.setTime(DmShared.xNull(txtPassInTime.getText()));
+        mrTemp.setPartyCode(DmShared.xNull(txtHEmployeeName.getTag()));
+        mrTemp.setPartyName(DmShared.xNull(txtHEmployeeName.getText()));
+        mrTemp.setDepartmentCode(DmShared.xNull(txtHDepartment.getText()));
+        mrTemp.setPassTypeCode(DmShared.xNull(txtHType.getText()));
+        mrTemp.setUnitCode(DmShared.xNull(txtUnitGross.getTag()));
+        mrTemp.setRemark(DmShared.xNull(txtRemark.getText()));
+        mrTemp.setMode(DmShared.xNull(txtHMode.getText()));
+        mrTemp.setPurposeText(DmShared.xNull(txtHPurpose.getText()));
+        mrTemp.setPassTypeCode(DmShared.xNull(txtHType.getTag()));
+        mrTemp.setDepartmentCode(DmShared.xNull(txtHDepartment.getTag()));
+        mrTemp.setDepartmentName(DmShared.xNull(txtHDepartment.getText()));
+        mrTemp.setDestination(DmShared.xNull(txtHDestination.getText()));
+        mrTemp.setEstdDate(DmShared.dNull(txtEstdDate.getText()));
+        mrTemp.getGateDetails().clear();
+        mrTemp.getGateDetails().addAll(grdGateDetail.getGrid().getStore().getAll());
+        if (modifyReasonMdl != null) {
+            mrTemp.setModifyReasonMdl(modifyReasonMdl);
+        }
+        return mrTemp;
+    }
+
+    private void topControlDelete(String strKey) {
+        GateIn_Mdl mrTemp = new GateIn_Mdl();
+        mrTemp.getGateDetails().addAll(grdGateDetail.getGrid().getStore().getAll());
+        mrTemp.setSharedKeyFieldCode(topControl.getDocId());
+        srvAsync.invokeRPC().deleteRecord(strKey, mrTemp, modifyReasonMdl, new AsyncCallback<DmResult<GateIn_Mdl>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                new DmAlertMessageBox(caught.getMessage(), (DmTextBox) null).show();
+            }
+
+            @Override
+            public void onSuccess(DmResult<GateIn_Mdl> result) {
+                GateIn_Mdl data;
+                if (result.isStatus()) {
+                    clear();
+                    data = result.getData();
+                    topControlCard();
+                } else {
+                    new DmAlertMessageBox(DmShared.xNull(result.getErrorMessage()), (DmTextBox) null).show();
+                }
+            }
+        });
+    }
+
+    private void clear() {
+        vNo = "";
+        recIdPrefix = "";
+        lblDiscard.setText("");
+        grdGateDetail.getGrid().getStore().clear();
+        modifyReasonMdl = new ModifyReason_Mdl();
+        userControl.setTextBlog(preparedByBlog, "");
+        userControl.setTextBlog(modifiedByBlog, "");
+//        if (topControl.getMode().equalsIgnoreCase("New")) {
+//            topControl.setDocId("");
+//        }
+
+    }
+
+    private void topControlCard() {
+        srvAsync.invokeRPC().getNavigator(topControl.getPermissions(), new AsyncCallback<DmResult<List<KeyFieldExtended>>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                new DmAlertMessageBox(caught.getMessage(), (DmTextBox) null).show();
+            }
+
+            @Override
+            public void onSuccess(DmResult<List<KeyFieldExtended>> result) {
+                if (result.isStatus()) {
+                    topControl.setNavigator(result.getData());
+                } else {
+                    new DmAlertMessageBox(result.getErrorMessage(), (DmTextBox) null).show();
+                }
+            }
+        });
+    }
+
+    private void topControlSaveError(int errorNo, String errorSource, String errorSourceCode, String errorMessage) {
+        switch (errorNo) {
+            case 100:
+                new DmAlertMessageBox(errorMessage, txtHType).show();
+                break;
+            case 200:
+                new DmAlertMessageBox(errorMessage, txtHPurpose).show();
+                break;
+            case 300:
+                new DmAlertMessageBox(errorMessage, txtHMode).show();
+                break;
+            case 400:
+                new DmAlertMessageBox(errorMessage, txtHDepartment).show();
+                break;
+            case 600:
+                new DmAlertMessageBox(errorMessage, txtPassInDate).show();
+                break;
+            case 700:
+                new DmAlertMessageBox(errorMessage, txtPassInTime).show();
+                break;
+
+            default:
+                new DmAlertMessageBox(errorMessage, txtHDestination).show();
+                break;
+        }
+    }
+
+    private void topControlMoveRec(String strKey) {
+        srvAsync.invokeRPC().getMoveRec(strKey, new AsyncCallback<DmResult<GateIn_Mdl>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                gateOutFlag = false;
+                new DmAlertMessageBox(caught.getMessage(), (DmTextBox) null).show();
+            }
+
+            @Override
+            public void onSuccess(DmResult<GateIn_Mdl> result) {
+                topControlMoveRecSuccess(result);
+            }
+        });
+    }
+
+    private void topControlMoveRecSuccess(DmResult<GateIn_Mdl> result) {
+        GateIn_Mdl data;
+        clear();
+
+        if (result.isStatus()) {
+            data = result.getData();
+            topControl.setDocId(DmShared.xNull(data.getSharedKeyFieldCode()));
+            txtEntryNo.setText(DmShared.xNull(data.getSharedKeyFieldName()));
+            txtEntryNo.setTag(DmShared.xNull(data.getU_EntDt_LatestLine()));
+            txtPassInDate.setText(DmShared.xNull(data.getDate()));
+            txtPassInTime.setText(DmShared.xNull(data.getTime()));
+            txtHVoucherType.setTag(DmShared.xNull(data.getVoucherTypeCode()));
+            txtHVoucherType.setText(DmShared.xNull(data.getVoucherTypeName()));
+            txtHEmployeeName.setText(DmShared.xNull(data.getPartyName()));
+            txtHEmployeeName.setTag(DmShared.xNull(data.getPartyCode()));
+            txtHType.setText(DmShared.xNull(data.getPassTypeName()));
+            txtHType.setTag(DmShared.xNull(data.getPassTypeCode()));
+            txtHDepartment.setTag(DmShared.xNull(data.getDepartmentCode()));
+            txtHDepartment.setText(DmShared.xNull(data.getDepartmentName()));
+            txtHDestination.setText(DmShared.xNull(data.getDestination()));
+            txtHMode.setTag(DmShared.xNull(data.getMode()));
+            txtHMode.setText(DmShared.xNull(data.getMode()));
+            txtHPurpose.setTag(DmShared.xNull(data.getPurposeText()));
+            txtHPurpose.setText(DmShared.xNull(data.getPurposeText()));
+            txtEstdDate.setText(DmShared.xNull(data.getEstdDate()));
+            txtRemark.setText(DmShared.xNull(data.getRemark()));
+            txtRemark.setText(DmShared.xNull(data.getRemark()));
+            txtGateOutDateView.setText(DmShared.dNull(data.getGateOutDate()));
+            txtGateOutTimeView.setText(DmShared.xNull(data.getGateOutTime()));
+
+            if (DmShared.iNull(data.getIsCancel()).intValue() == 1) {
+                lblDiscard.setText("Discarded");
+            } else {
+                lblDiscard.setText("");
+            }
+
+            txtUnitGross.setTag(DmShared.xNull(data.getUnitCode()));
+            txtUnitGross.setText(DmShared.xNull(data.getUnitName()));
+            txtUnitNet.setText(DmShared.xNull(data.getUnitName()));
+            txtUnitTare.setText(DmShared.xNull(data.getUnitName()));
+            vNo = DmShared.iNull(data.getRecId().getCounter()).toString();
+            recIdPrefix = DmShared.xNull(data.getRecId().getPrefix());
+            txtHMode.setText(DmShared.xNull(data.getMode()));
+            grdGateDetail.getGrid().getStore().clear();
+            grdGateDetail.getGrid().getStore().addAll(data.getGateDetails());
+            if (gateOutFlag) {
+                txtSlipNo.setText(DmShared.xNull(data.getSharedKeyFieldName()));
+            } else {
+                txtSlipNo.setText("");
+            }
+            gateOutFlag = false;
+
+            userControl.setTextBlog(preparedByBlog, DmShared.xNull(data.getSharedPreparedBy()));
+            userControl.setTextBlog(modifiedByBlog, DmShared.xNull(data.getSharedModifiedBy()));
+
+            if (cardCallBack != null) {
+                cardAction();
+            }
+
+        } else {
+            new DmAlertMessageBox(result.getErrorMessage(), (DmTextBox) null).show();
+        }
+        topControl.setDisplay(true);
+        manageDisplay(false);
+    }
+
+    private void manageDisplay(boolean flag) {
+
+        txtNetWeight.setEnabled(false);
+        txtEntryNo.setEnabled(false);
+        txtPassInDate.setEnabled(false);
+        txtPassInTime.setEnabled(false);
+        txtSlipNo.setEnabled(false);
+        txtOutDate.setEnabled(false);
+        txtOutTime.setEnabled(false);
+        txtUnitGross.setEnabled(false);
+        txtUnitTare.setEnabled(false);
+        txtUnitNet.setEnabled(false);
+
+        flwInDateTimeContainer.clear();
+        if (flag) {
+            if (!dateTimeEditable) {
+                txtPassInDate.setEnabled(false);
+                txtPassInTime.setEnabled(false);
+            }
+
+            if (topControl.getMode().equalsIgnoreCase("Edit")) {
+                txtHVoucherType.setEnabled(false);
+                if (dateTimeEditable) {
+                    flwInDateTimeContainer.add(flwInDateTime);
+                }
+            } else {
+                flwInDateTimeContainer.add(flwInDateTime);
+            }
+        } else {
+            txtPassInDate.setEnabled(dateTimeEditable);
+            txtPassInTime.setEnabled(dateTimeEditable);
+        }
+        if (DmShared.xNull(topControl.getMode()).trim().equalsIgnoreCase("Edit")
+                && DmShared.iNull(STEnum.GateType.RETURNABLE.getId()).toString().equalsIgnoreCase(DmShared.xNull(txtHType.getTag()))) {
+            manageItemDetails(false);
+        }
+
+        showGateAdviceBtn(flag);
+    }
+
+    private void iniDefaultValues(final SetWidgetInvoker swi) {
+        srvAsync.invokeRPC().getDefaultValues(new AsyncCallback<DmResult<Default_Mdl>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                new DmAlertMessageBox(caught.getMessage(), txtPassInDate).show();
+            }
+
+            @Override
+            public void onSuccess(DmResult<Default_Mdl> result) {
+                if (result.isStatus()) {
+                    defaultValue = result.getData();
+                    manageDisplay(false);
+
+                    swi.setWidget(GateIn.this);
+                } else {
+                    new DmAlertMessageBox(result.getErrorMessage(), txtPassInDate).show();
+                }
+            }
+        });
+    }
+
+    private void setDefaultValues() {
+
+        txtHVoucherType.setTag(defaultValue.getvTypeCode());
+        txtHVoucherType.setText(defaultValue.getvTypeName());
+        getDefaultDateTime(gateOutFlag);
+
+        txtUnitGross.setText(DmShared.xNull(defaultValue.getUnitName()));
+        txtUnitGross.setTag(DmShared.xNull(defaultValue.getUnitCode()));
+        txtUnitGross.setTag2nd(DmShared.xNull(defaultValue.getUnitDecimalPlaces()));
+
+        txtUnitTare.setText(DmShared.xNull(defaultValue.getUnitName()));
+        txtUnitNet.setText(DmShared.xNull(defaultValue.getUnitName()));
+        txtHType.setFocus(true);
+    }
+
+    private void findEvents() {
+        dmFind.setTitle(this.asWidget().getTitle());
+
+        dmFind.addHelpGridCallBack(new DmFind.FindCallBack<Find_Mdl>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                srvAsync.invokeRPC(blnCallBackWait).getFind(topControl.getPermissions(), helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<Find_Mdl>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), dmFind.getTextBox()).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<Find_Mdl>> result) {
+                        if (result.isStatus()) {
+                            dmFind.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), dmFind.getTextBox()).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelectedRow(boolean blnStatus, Find_Mdl tRow) {
+                flwForm.remove(dmFind);
+                flwForm.add(vrtInnerForm);
+
+                if (blnStatus) {
+                    topControlMoveRec(tRow.getSharedKeyFieldCode());
+                }
+            }
+        });
+    }
+
+    private void gridEvents() {
+        gateGridEdit.addCallBack(new GateInGridEdit.CallBack() {
+
+            public void onOk(GateInGridEdit_Mdl opdService) {
+                grdGateDetail.commitChanges();
+
+            }
+
+            public void onDelete() {
+                grdGateDetail.commitChanges();
+
+            }
+
+        });
+
+        grdGateDetail.getGrid().addRowClickHandler(new RowClickEvent.RowClickHandler() {
+            @Override
+            public void onRowClick(RowClickEvent event) {
+                showGrnEntryGridEdit(event.getRowIndex());
+            }
+        });
+
+        grdGateDetail.getGrid().addDomHandler(new KeyDownHandler() {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && !event.getNativeEvent().getCtrlKey()) {
+                    showGrnEntryGridEdit(grdGateDetail.getGrid().getStore().indexOf(grdGateDetail.getGrid().getSelectionModel().getSelectedItem()));
+                }
+            }
+        }, KeyDownEvent.getType());
+    }
+
+    private void showGrnEntryGridEdit(int currentRowIndex) {
+        if (topControl.getMode().trim().equalsIgnoreCase("Browse")) {
+            gateGridEdit.show(currentRowIndex, false, false, false, this);
+        } else {
+            gateGridEdit.show(currentRowIndex, true, true, true, this);
+        }
+    }
+
+    private void getDefaultDateTime(final Boolean dateTimeFlag) {
+        srvAsync.invokeRPC().getDefaultDateTime(new AsyncCallback<DmResult<Default_Mdl>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                new DmAlertMessageBox(caught.getMessage(), (DmTextBox) null).show();
+            }
+
+            @Override
+            public void onSuccess(DmResult<Default_Mdl> result) {
+
+                if (result.isStatus()) {
+                    if (dateTimeFlag) {
+                        txtOutDate.setText(result.getData().getDate());
+                        txtOutTime.setText(result.getData().getTime());
+                    } else {
+                        txtPassInDate.setText(result.getData().getDate());
+                        txtPassInTime.setText(result.getData().getTime());
+                    }
+                }
+            }
+        });
+
+    }
+
+    public Widget asWidget() {
+        return flwForm;
+    }
+
+    @Override
+    public void searchRecord(String key) {
+        topControlMoveRec(key);
+    }
+
+    @Override
+    public void onBlur(BlurEvent event) {
+        if (event.getSource() == txtEstdDate) {
+            txtEstdDate.setText(DmClient.returnDate(txtEstdDate.getText()));
+        } else if (event.getSource() == txtOutDate) {
+            txtOutDate.setText(DmClient.returnDate(txtOutDate.getText()));
+        } else if (event.getSource() == txtSlipNo) {
+
+            getSlipDetails(txtSlipNo.getText());
+        } else if (event.getSource() == txtGrossWeight) {
+            calculate();
+
+        } else if (event.getSource() == txtTareWeight) {
+            calculate();
+        }
+
+    }
+
+    private void getSlipDetails(String slipNo) {
+
+        srvAsync.invokeRPC().getSlipNoDetail(slipNo, new AsyncCallback<DmResult<GateIn_Mdl>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                new DmAlertMessageBox(caught.getMessage(), (DmTextBox) null).show();
+            }
+
+            @Override
+            public void onSuccess(DmResult<GateIn_Mdl> result) {
+                topControlMoveRecSuccess(result);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(ClickEvent event) {
+        if (event.getSource() == btnSearchGateEntry) {
+        } else if (event.getSource() == btnGateOutBy) {
+            if (DmShared.iNull(topControl.getDocId()).longValue() != 0) {
+
+            }
+        } else if (event.getSource() == btnClockGateEntry) {
+            if (!topControl.getDocId().equals("")) {
+                getDefaultDateTime(true);
+            }
+        } else if (event.getSource() == btnGateInDateTime) {
+            if (topControl.getDocId().equals("") && topControl.getMode().equalsIgnoreCase("New")) {
+                getDefaultDateTime(false);
+            }
+        }
+    }
+
+    @Override
+    public void onAttachOrDetach(AttachEvent event) {
+        if (event.isAttached()) {
+            DmClient.addRootKeyEvent(this, Event.ONKEYDOWN);
+        } else {
+            DmClient.removeRootKeyEvent(this, Event.ONKEYDOWN);
+            gateGridEdit.hide();
+        }
+    }
+
+    @Override
+    public void rootKeyInvoked(DmRootEvent rootEvent) {
+        if (rootEvent.getEvent().getNativeEvent().getCtrlKey() && rootEvent.getEvent().getNativeEvent().getShiftKey() && rootEvent.getEvent().getNativeEvent().getKeyCode() == KeyCodes.KEY_P) {
+            rootEvent.stopPropagation();
+        }
+    }
+
+    public void calculate() {
+        String unitDecimalFormat = DmShared.getNumberFormat(DmShared.iNull(txtUnitGross.getTag2nd()).intValue());
+
+        txtGrossWeight.setText(DmClient.vNull(txtGrossWeight.getText(), unitDecimalFormat));
+        txtTareWeight.setText(DmClient.vNull(txtTareWeight.getText(), unitDecimalFormat));
+        txtNetWeight.setText(DmClient.vNull(DmShared.vNull(txtGrossWeight.getText()) - DmShared.vNull(txtTareWeight.getText()), unitDecimalFormat));
+    }
+
+    private void showGateAdviceBtn(boolean flag) {
+        flwBtnAdvice.clear();
+        if (!flag) {
+
+        }
+    }
+
+    @Override
+    public void action(String nature, Object object, DmCallBack callback) {     //TBC
+        nature = DmShared.xNull(nature).trim().toUpperCase();
+        try {
+            switch (nature) {
+                case "GATE_OUT":
+                case "ADVICE":
+                    this.cardActionNature = nature;
+                    this.cardCallBack = callback;
+                    if (cardActionNature.equalsIgnoreCase("GATE_OUT")) {
+                        gateOutFlag = true;
+                    }
+                    topControlMoveRec((String) object);
+                case "FOCUS_ON_ADD":
+                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            if (cardActionNature.equalsIgnoreCase("GATE_OUT")) {
+                                btnGateOutBy.setFocus(true);
+                            } else if (cardActionNature.equalsIgnoreCase("ADVICE")) {
+                                btnGateAdvice.setFocus(true);
+                            }
+                        }
+                    });
+            }
+        } catch (Exception e) {
+            new DmAlertMessageBox(e.getMessage(), (DmTextBox) null).show();
+        }
+    }
+
+    private void cardAction() {
+        if (cardCallBack != null) {
+            if (cardActionNature.equalsIgnoreCase("GATE_OUT")) {
+                getDefaultDateTime(true);
+            }
+            DmResult<Object> dmrTemp = new DmResult<>();
+            dmrTemp.setStatus(true);
+            cardCallBack.result(dmrTemp);
+        }
+        cardCallBack = null;
+        cardActionNature = "";
+    }
+
+    private void prnRecord(boolean printToPrinter) {
+        HashMap<String, FieldUDT_Mdl> hashMapFilter = new HashMap<>();
+        hashMapFilter.put("docId", new FieldUDT_Mdl("Gate Entry", DmShared.xNull(txtEntryNo.getText()), DmShared.xNull(topControl.getDocId())));
+        new OpenSourceReport(txtHVoucherType.getTag(), "", widgetName, widgetName, hashMapFilter, printToPrinter, new OpenSourceReport.CallBack() {
+            @Override
+            public DmReportProperty_Mdl setReportProperty(DmReportProperty_Mdl reportProperty) {
+                DmClient.localSettingPrintMap(reportProperty, moduleName, widgetName, "Print");
+                return reportProperty;
+            }
+        }, DmClient.<SetWidgetInvoker>getStoreItem("swiEvent"));
+    }
+
+    private void manageItemDetails(boolean flag) {
+        txtHPurpose.setEnabled(flag);
+        txtHMode.setEnabled(flag);
+        txtHDepartment.setEnabled(flag);
+        txtEstdDate.setEnabled(flag);
+        txtHDestination.setEnabled(flag);
+
+        txtHPurpose.setMandatory(flag);
+        txtHMode.setMandatory(flag);
+        txtHDepartment.setMandatory(flag);
+
+    }
+
+}

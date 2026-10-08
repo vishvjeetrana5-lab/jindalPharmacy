@@ -1,0 +1,235 @@
+package aarogya.pharmacy.indentClose.client;
+
+import aarogya.pharmacy.indentClose.shared.GrdIndentClose_Mdl;
+import aarogya.projectMenu.self.shared.pmPharmacy;
+import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.editor.client.Editor;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.core.client.ValueProvider;
+import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import com.sencha.gxt.widget.core.client.grid.GridViewConfig;
+import dataman.dmBase.self.shared.DmEnum.*;
+import dataman.dmBase.self.shared.*;
+import dataman.dmToolkit.dmGridPaging.client.DmGridPaging;
+import dataman.dmToolkit.dmStatic.client.DmClient;
+import dataman.dmToolkit.dmStatic.shared.DmShared;
+import dataman.dmToolkit.dmToolContainer.client.DmToolContainer;
+
+class IndentClose_Dsg {
+
+    final String widgetName = new pmPharmacy().INDENT_CLOSE.caption;
+
+    final DmClient.ViaList vl = new DmClient.ViaList();
+    final FlowPanel flwForm = new FlowPanel();
+    final DmToolContainer toolContainer = new DmToolContainer();
+    FlowPanel flwTableDisplaySection = new FlowPanel();
+    final VerticalPanel vrtInnerForm = new VerticalPanel();
+
+//    final Button btnCloseAll = new Button();
+    final Button btnClose = new Button();
+    final Button btnSetting = new Button();
+
+    public IndentClose_Dsg() {
+        ini();
+        createGrid();
+    }
+
+    private void ini() {
+        DmClient.setStyle(vrtInnerForm, "100%", null, null, null, DmPosition.CENTER_HORIZONTAL, true);
+        flwForm.addStyleName("dm-FlwForm");
+        flwForm.setHeight("576px");
+        flwForm.add(toolContainer);
+        flwForm.getElement().getStyle().setBackgroundColor("white");
+        createToolControl();
+
+        FlowPanel flwWorkingArea = new FlowPanel();
+        flwWorkingArea.add(workingArea());
+        vrtInnerForm.add(flwWorkingArea);
+
+        flwForm.add(vrtInnerForm);
+        flwTableDisplaySection.setVisible(true);
+        /////////////////////
+
+    }
+
+    private void createToolControl() {
+        Anchor aBtn;
+        InlineLabel label;
+
+        label = new InlineLabel("Close");
+        aBtn = new Anchor();
+        aBtn.addStyleName("fa fa-times");
+        aBtn.getElement().getStyle().setColor("#7d7d7d");
+        btnClose.setTitle("Close");
+        btnClose.addStyleName("dm-top-control-btnStyle");
+        btnClose.getElement().appendChild(aBtn.getElement());
+        btnClose.getElement().appendChild(label.getElement());
+        btnClose.setWidth("70px");
+
+        label = new InlineLabel("Setting");
+        aBtn = new Anchor();
+        aBtn.addStyleName("fa fa-filter");
+        aBtn.getElement().getStyle().setColor("#7d7d7d");
+        btnSetting.setTitle("Setting");
+        btnSetting.addStyleName("dm-top-control-btnStyle");
+        btnSetting.getElement().appendChild(aBtn.getElement());
+        btnSetting.getElement().appendChild(label.getElement());
+        btnSetting.setWidth("70px");
+        
+//        label = new InlineLabel("Close All");
+//        aBtn = new Anchor();
+//        aBtn.addStyleName("fa fa-trash");
+//        aBtn.getElement().getStyle().setColor("#7d7d7d");
+//        btnCloseAll.setTitle("Close_All");
+//        btnCloseAll.addStyleName("dm-top-control-btnStyle");
+//        btnCloseAll.getElement().appendChild(aBtn.getElement());
+//        btnCloseAll.getElement().appendChild(label.getElement());
+//        btnCloseAll.setWidth("70px");
+
+    }
+
+    private FlowPanel workingArea() {
+        FlowPanel flwTable, flwTr, flwTd;
+
+        flwTable = new FlowPanel();
+        DmClient.setStyle(flwTable, "980px", "529px", "left", null, DmPosition.NONE, true);
+        flwTr = new FlowPanel();
+        DmClient.setStyle(flwTable, "100%", null, "left", null, DmPosition.NONE, true);
+        flwTd = new FlowPanel();
+        DmClient.setStyle(flwTd, "100%", "529px", "left", null, DmPosition.NONE, false);
+        flwTd.add(vl.add(dmGrd));
+        flwTr.add(flwTd);
+        flwTable.add(flwTr);
+        return flwTable;
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="Grd">
+    interface Grd_PrpAcs extends KeyFieldHashCode_T_PrpAcs<GrdIndentClose_Mdl> {
+
+        @Editor.Path("IsChecked")
+        ValueProvider<GrdIndentClose_Mdl, String> isChecked();
+
+        @Editor.Path("IsView")
+        ValueProvider<GrdIndentClose_Mdl, String> isView();
+
+        @Editor.Path("IndNo")
+        ValueProvider<GrdIndentClose_Mdl, String> indNo();
+
+        @Editor.Path("IndDate")
+        ValueProvider<GrdIndentClose_Mdl, String> indDate();
+
+        @Editor.Path("MedicineName")
+        ValueProvider<GrdIndentClose_Mdl, String> medicineName();
+
+        @Editor.Path("DepartmentName")
+        ValueProvider<GrdIndentClose_Mdl, String> departmentName();
+
+        @Editor.Path("ReqDate")
+        ValueProvider<GrdIndentClose_Mdl, String> reqDate();
+
+        @Editor.Path("IndQuantity")
+        ValueProvider<GrdIndentClose_Mdl, String> displayIndQty();
+
+        @Editor.Path("ApprQuantity")
+        ValueProvider<GrdIndentClose_Mdl, String> displayApprQty();
+
+        @Editor.Path("UnitName")
+        ValueProvider<GrdIndentClose_Mdl, String> unitName();
+
+        @Editor.Path("SiteName")
+        ValueProvider<GrdIndentClose_Mdl, String> siteName();
+
+        @Editor.Path("ApprovedBy")
+        ValueProvider<GrdIndentClose_Mdl, String> approvedBy();
+
+        @Editor.Path("Approval")
+        ValueProvider<GrdIndentClose_Mdl, String> approval();
+
+        @Editor.Path("IndCatName")
+        ValueProvider<GrdIndentClose_Mdl, String> indCatName();
+    }
+
+    final DmGridPaging<GrdIndentClose_Mdl, Grd_PrpAcs, String> dmGrd = new DmGridPaging(GWT.create(Grd_PrpAcs.class), 23, true);
+
+    public void createGrid() {
+        ColumnConfig<GrdIndentClose_Mdl, String> selectCheckBox;
+        ColumnConfig<GrdIndentClose_Mdl, String> selectDisplay;
+//        selectCheckBox = dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().isChecked(), "", 30, "");
+        selectDisplay = dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().isView(), "", 25, "");
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().displayApprQty(), "Appr. Qty.", 83, "").setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().displayIndQty(), "Ind. Qty.", 83, "").setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().unitName(), "SKU", 50, "");
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().medicineName(), "Medicine Name", 250, "");
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().reqDate(), "Req. Date", 80, "");
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().name(), "Indent No.", 80, "");
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().indDate(), "Indent Date", 80, "");
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().indCatName(), "Vr. Type", 80, "");
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().approval(), "Approved By", 130, "");
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().departmentName(), "Department", 80, "");
+        dmGrd.getDmGrid().addTextColumn(dmGrd.getDmGrid().getPropertyAccess().siteName(), "Site", 120, "");
+        dmGrd.getDmGrid().initializeGrid(dmGrd.getDmGrid().getPropertyAccess().fieldHashCode(), 1260, 0, 0);
+//        selectCheckBox.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+//        selectCheckBox.setCellPadding(false);
+        selectDisplay.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        selectDisplay.setCellPadding(false);
+        dmGrd.getDmGrid().getGrid().getView().setViewConfig(new GridViewConfig<GrdIndentClose_Mdl>() {
+
+            @Override
+            public String getColStyle(GrdIndentClose_Mdl model, ValueProvider<? super GrdIndentClose_Mdl, ?> valueProvider, int rowIndex, int colIndex) {
+                String styleClass = " ";
+                if (colIndex == 1) {
+                    if (DmShared.vNull(model.getIsChecked()).doubleValue() > 1) {
+                        styleClass += "dm-FontBold ";
+                    }
+                }
+                if (DmShared.xNull(model.getIsStatus()).equals("1") && !DmShared.xNull(model.getApprovedBy()).equals("")) {
+                    styleClass += "dm-GridCellDairyCancel";
+                } else if (DmShared.xNull(model.getIsStatus()).equals("2") && !DmShared.xNull(model.getApprovedBy()).equals("")) {
+                    styleClass += "dm-GridCellDairyConfirm";
+                } else if (!DmShared.xNull(model.getApprovedBy()).equals("")) {
+                    styleClass += "dm-GridCellDisable";
+                } else if (DmShared.xNull(model.getIsStatus()).equals("1")) {
+                    styleClass += "dm-GridCellDairyCancel";
+                } else if (DmShared.xNull(model.getIsStatus()).equals("2")) {
+                    styleClass += "dm-GridCellDairyConfirm";
+                }
+                return styleClass;
+            }
+
+            @Override
+            public String getRowStyle(GrdIndentClose_Mdl model, int rowIndex) {
+                return "";
+            }
+        });
+
+//        selectCheckBox.setCell(new AbstractCell<String>() {
+//            @Override
+//            public void render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+//                int val = DmShared.vNull(dmGrd.getDmGrid().getGrid().getStore().get(context.getIndex()).getIsChecked()).intValue();
+//                if (val == 1) {
+//                    sb.appendHtmlConstant("<span class = 'fa fa-check-square-o' style='font-size:1.3em'></span>");
+//                } else if (val == 0) {
+//                    sb.appendHtmlConstant("<span class = 'fa fa-square-o' style='font-size:1.3em'></span>");
+//                }
+//            }
+//        });
+        selectDisplay.setCell(new AbstractCell<String>() {
+            @Override
+            public void render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+                sb.appendHtmlConstant("<span class = 'fa fa-times' style='font-size:1.3em; color:green;'></span>");
+            }
+        });
+        dmGrd.getHelper().addSort("v_Date", DmEnum.DmSortType.DESC, "v_Date");
+        dmGrd.getHelper().addSort("recId", DmEnum.DmSortType.DESC, "recId");
+
+    }
+    //</editor-fold>
+}

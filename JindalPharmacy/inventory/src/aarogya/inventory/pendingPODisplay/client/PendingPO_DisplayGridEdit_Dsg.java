@@ -1,0 +1,315 @@
+package aarogya.inventory.pendingPODisplay.client;
+
+import aarogya.inventory.pendingPODisplay.shared.GrdMedicineDetail_Mdl;
+import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.core.client.GWT;
+import dataman.dmBase.self.shared.DmEnum.*;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.editor.client.Editor;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasAutoHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.core.client.ValueProvider;
+import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.GridViewConfig;
+import dataman.dmToolkit.dmGrid.client.DmGrid;
+import dataman.dmToolkit.dmLabel.client.DmLabel;
+import dataman.dmToolkit.dmStatic.client.DmClient;
+import dataman.dmToolkit.dmStatic.shared.DmShared;
+import dataman.dmToolkit.dmTextBox.client.DmTextBox;
+import dataman.dmToolkit.dmToolContainer.client.DmToolContainer;
+import dataman.dmToolkit.dmUserControl.client.DmUserControl;
+import dataman.dmBase.self.shared.KeyFieldHashCode_T_PrpAcs;
+import dataman.dmToolkit.dmTopControl.client.DmTopControl;
+
+abstract class PendingPO_DisplayGridEdit_Dsg {
+
+    final DmClient.ViaList vl = new DmClient.ViaList();
+    final PopupPanel popupPanel = new PopupPanel();
+    final DmToolContainer toolContainer = new DmToolContainer();
+    final VerticalPanel vrtInnerForm = new VerticalPanel();
+    final FlowPanel flwOk = new FlowPanel();
+    final Button btnOk = new Button();
+    final FlowPanel flwClose = new FlowPanel();
+    final Button btnClose = new Button();
+    final DmUserControl userControl = new DmUserControl();
+    final DmTopControl topControl = new DmTopControl(vl, userControl);
+
+    final DmTextBox txtApproved = new DmTextBox();
+    final DmTextBox txtPurchaseNo = new DmTextBox();
+    final DmTextBox txtPurchaseDate = new DmTextBox();
+    final DmTextBox txtStatus = new DmTextBox();
+    final DmTextBox txtMedName = new DmTextBox();
+    final DmTextBox txtReqDate = new DmTextBox();
+    final DmTextBox txtOrdQty = new DmTextBox();
+    final DmTextBox txtQuotationNo = new DmTextBox();
+    final DmTextBox txtRate = new DmTextBox();
+    final DmTextBox txtSKU = new DmTextBox();
+    final DmTextBox txtCurrency = new DmTextBox();
+    final DmTextBox txtWTACode = new DmTextBox();
+    final DmTextBox txtSupplier = new DmTextBox();
+    final DmTextBox txtCurrentUser = new DmTextBox();
+    final DmTextBox txtRemarks = new DmTextBox();
+    final DmTextBox txtApprovedBy = new DmTextBox();
+    final DmTextBox txtApprovedDateTime = new DmTextBox();
+    final DmLabel isCancelled = new DmLabel("");
+    final Button btnApprovedBy = new Button();
+
+    public final static String approvedByBlog = "Approved By";
+    public final static String approvedDateTimeBlog = "Approved Date & Time";
+
+    Style style;
+
+
+
+    //<editor-fold defaultstate="collapsed" desc="grdItemlDetails">
+    interface GrdItemDetail_PrpAcs extends KeyFieldHashCode_T_PrpAcs<GrdMedicineDetail_Mdl> {
+
+        @Editor.Path("IsView")
+        ValueProvider<GrdMedicineDetail_Mdl, String> isView();
+
+        @Editor.Path("MedName")
+        ValueProvider<GrdMedicineDetail_Mdl, String> itemName();
+
+        @Editor.Path("OrderDate")
+        ValueProvider<GrdMedicineDetail_Mdl, String> reqDate();
+
+        @Editor.Path("Remark")
+        ValueProvider<GrdMedicineDetail_Mdl, String> remark();
+
+        @Editor.Path("OrderQty")
+        ValueProvider<GrdMedicineDetail_Mdl, String> orderQty();
+
+        @Editor.Path("Rate")
+        ValueProvider<GrdMedicineDetail_Mdl, String> rate();
+
+        @Editor.Path("Amount")
+        ValueProvider<GrdMedicineDetail_Mdl, String> amount();
+
+        @Editor.Path("Unit")
+        ValueProvider<GrdMedicineDetail_Mdl, String> unit();
+
+        @Editor.Path("Image")
+        ValueProvider<GrdMedicineDetail_Mdl, String> image();
+
+        @Editor.Path("ChallanQty")
+        ValueProvider<GrdMedicineDetail_Mdl, String> challanQty();
+
+    }
+
+    final DmGrid<GrdMedicineDetail_Mdl, GrdItemDetail_PrpAcs> grdMedDetails = new DmGrid(GWT.create(GrdItemDetail_PrpAcs.class));
+
+    private Grid iniGrdItemDetails() {
+        ColumnConfig<GrdMedicineDetail_Mdl, String> cancelRecord;
+        ColumnConfig<GrdMedicineDetail_Mdl, String> selectDisplay;
+        grdMedDetails.addRowNumberColumn();
+        selectDisplay = grdMedDetails.addTextColumn(grdMedDetails.getPropertyAccess().isView(), "", 25, "");
+        grdMedDetails.addTextColumn(grdMedDetails.getPropertyAccess().name(), "Medicine Name", 11, "");
+        grdMedDetails.addTextColumn(grdMedDetails.getPropertyAccess().orderQty(), "Qty.", 60, "").setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        grdMedDetails.addTextColumn(grdMedDetails.getPropertyAccess().unit(), "Unit", 50, "");
+        grdMedDetails.addTextColumn(grdMedDetails.getPropertyAccess().rate(), "Rate", 60, "").setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        grdMedDetails.addTextColumn(grdMedDetails.getPropertyAccess().amount(), "Amount", 90, "").setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        grdMedDetails.addTextColumn(grdMedDetails.getPropertyAccess().reqDate(), "Req. Date", 80, "");
+        grdMedDetails.addTextColumn(grdMedDetails.getPropertyAccess().remark(), "Remark", 100, "");
+        grdMedDetails.addTextColumn(grdMedDetails.getPropertyAccess().challanQty(), "Rec.Qty", 70, "").setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+
+        selectDisplay.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        selectDisplay.setCellPadding(false);
+        grdMedDetails.initializeGrid(grdMedDetails.getPropertyAccess().fieldHashCode(), 690, 301, 3);
+
+        grdMedDetails.getGrid().getView().setViewConfig(new GridViewConfig<GrdMedicineDetail_Mdl>() {
+
+            @Override
+            public String getColStyle(GrdMedicineDetail_Mdl model, ValueProvider<? super GrdMedicineDetail_Mdl, ?> valueProvider, int rowIndex, int colIndex) {
+                String styleClass = " ";
+                if (DmShared.xNull(model.getIsStatus()).equals("1")) {
+                    styleClass += "dm-GridCellDairyCancel";
+                } else if (DmShared.xNull(model.getIsStatus()).equals("2")) {
+                    styleClass += "dm-GridCellDairyConfirm";
+                }
+                return styleClass;
+            }
+
+            @Override
+            public String getRowStyle(GrdMedicineDetail_Mdl model, int rowIndex) {
+                return "";
+            }
+        });
+
+        selectDisplay.setCell(new AbstractCell<String>() {
+            @Override
+            public void render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+                sb.appendHtmlConstant("<span class = 'fa fa-eye' style='font-size:1.3em; color:green;'></span>");
+            }
+        });
+
+        return grdMedDetails.getGrid();
+    }
+    //</editor-fold>
+
+    public PendingPO_DisplayGridEdit_Dsg() {
+        ini();
+    }
+
+    private void ini() {
+        FlowPanel flw;
+        DmClient.setStyle(vrtInnerForm, "100%", null, null, null, DmPosition.NONE, true);
+        popupPanel.setGlassEnabled(true);
+        popupPanel.setWidth("690px");
+        popupPanel.setHeight("405px");
+        iniToolControls();
+        vrtInnerForm.add(toolContainer);
+        flw = new FlowPanel();
+        flw.setStyleName("dm-FlwWorkingArea");
+        flw.add(workingArea());
+        vrtInnerForm.add(flw);
+        vrtInnerForm.setCellHeight(flw, "100%");
+        popupPanel.add(vrtInnerForm);
+    }
+
+    private void iniToolControls() {
+        InlineLabel label;
+        Anchor aBtn;
+        label = new InlineLabel("Ok");
+        aBtn = new Anchor();
+        aBtn.addStyleName("fa fa-check");
+        aBtn.getElement().getStyle().setColor("#7d7d7d");
+        btnOk.setTitle("Ok");
+        btnOk.addStyleName("dm-top-control-btnStyle");
+        btnOk.getElement().appendChild(aBtn.getElement());
+        btnOk.getElement().appendChild(label.getElement());
+        btnOk.setWidth("70px");
+        flwOk.add(vl.add(btnOk));
+
+        label = new InlineLabel("Close");
+        aBtn = new Anchor();
+        aBtn.addStyleName("fa fa-times");
+        aBtn.getElement().getStyle().setColor("#7d7d7d");
+        btnClose.setTitle("Close");
+        btnClose.addStyleName("dm-top-control-btnStyle");
+        btnClose.getElement().appendChild(aBtn.getElement());
+        btnClose.getElement().appendChild(label.getElement());
+        btnClose.setWidth("70px");
+        flwClose.add(btnClose);
+
+    }
+
+    private FlowPanel workingArea() {
+        FlowPanel flwTable, flwTR, flwTD;
+        DmLabel lbl;
+
+        flwTable = new FlowPanel();
+        DmClient.setStyle(flwTable, "100%", "375px", null, null, DmPosition.CENTER, true);
+
+        //Rate////////////////////////////////////////
+        flwTR = new FlowPanel();
+        DmClient.setStyle(flwTR, "100%", null, "left", null, DmPosition.NONE, false);
+
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "12%", null, "left", null, DmPosition.NONE, false);
+        lbl = new DmLabel("Order No.");
+        flwTD.add(lbl);
+        flwTR.add(flwTD);
+
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "18%", null, "left", null, DmPosition.NONE, false);
+        flwTD.add(vl.add(txtPurchaseNo));
+        flwTR.add(flwTD);
+
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "13%", null, "left", null, DmPosition.NONE, false);
+        lbl = new DmLabel("Order Date");
+        lbl.getElement().getStyle().setMarginLeft(6, Style.Unit.PCT);
+        flwTD.add(lbl);
+        flwTR.add(flwTD);
+
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "15%", null, "left", null, DmPosition.NONE, false);
+        flwTD.add(vl.add(txtPurchaseDate));
+        flwTR.add(flwTD);
+
+        ///////////////////////////////////////////////
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "15%", null, "left", null, DmPosition.NONE, false);
+        lbl = new DmLabel("Quotation No.");
+        lbl.getElement().getStyle().setMarginLeft(10, Style.Unit.PCT);
+        flwTD.add(lbl);
+        flwTR.add(flwTD);
+
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "26.5%", null, "left", null, DmPosition.NONE, false);
+        flwTD.add(vl.add(txtQuotationNo));
+        flwTR.add(flwTD);
+        flwTable.add(flwTR);
+
+        flwTR = new FlowPanel();
+        DmClient.setStyle(flwTR, "100%", null, "left", null, DmPosition.NONE, false);
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "12%", null, "left", null, DmPosition.NONE, false);
+        lbl = new DmLabel("Supplier");
+        flwTD.add(lbl);
+        flwTR.add(flwTD);
+
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "46%", null, "left", null, DmPosition.NONE, false);
+        flwTD.add(vl.add(txtSupplier));
+        flwTR.add(flwTD);
+
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "15%", null, "left", null, DmPosition.NONE, false);
+        lbl = new DmLabel("Currency");
+        lbl.getElement().getStyle().setMarginLeft(11, Style.Unit.PCT);
+        flwTD.add(lbl);
+        flwTR.add(flwTD);
+
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "26.5%", null, "left", null, DmPosition.NONE, false);
+        flwTD.add(vl.add(txtCurrency));
+        flwTR.add(flwTD);
+
+        flwTable.add(flwTR);
+
+        flwTR = new FlowPanel();
+        DmClient.setStyle(flwTR, "100%", null, "left", null, DmPosition.NONE, false);
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "20%", null, "left", null, DmPosition.NONE, false);
+        flwTD.add(isCancelled);
+        isCancelled.getElement().getStyle().setColor("red");
+        isCancelled.getElement().getStyle().setFontSize(14, Style.Unit.PX);
+        isCancelled.getElement().getStyle().setMarginLeft(66, Style.Unit.PCT);
+        flwTR.add(flwTD);
+        flwTable.add(flwTR);
+
+        flwTR = new FlowPanel();
+        DmClient.setStyle(flwTR, "100%", "287px", "left", null, DmPosition.NONE, false);
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "100%", null, "left", null, DmPosition.NONE, false);
+        flwTD.add(vl.add(iniGrdItemDetails()));
+        flwTR.add(flwTD);
+        flwTable.add(flwTR);
+
+        flwTR = new FlowPanel();
+        DmClient.setStyle(flwTR, "100%", null, "left", null, DmPosition.NONE, true);
+        flwTR.getElement().getStyle().setMarginTop(2, Style.Unit.PCT);
+        flwTD = new FlowPanel();
+        DmClient.setStyle(flwTD, "100%", null, "left", null, DmPosition.NONE, false);
+        userControl.addTextBlog(approvedByBlog, 150, false, true);
+        userControl.addGap(53);
+        userControl.addTextBlog(approvedDateTimeBlog, 150, true, false);
+        flwTD.add(vl.add(userControl));
+        flwTR.add(flwTD);
+        flwTable.add(flwTR);
+
+
+        return flwTable;
+    }
+
+}

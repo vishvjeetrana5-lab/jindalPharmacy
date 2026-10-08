@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="dataman.dmToolkit.DmToolkit"/>
+    <inherits name="dataman.dmBase.DmBase"/>
+    <inherits name="aarogya.selfToolkit.STStatic"/>
+    <inherits name="aarogya.selfToolkit.CardPaymentPopup"/>
+    <inherits name="aarogya.selfToolkit.PatientSearch"/>
+    <inherits name="aarogya.selfToolkit.SPLApplicableFrom"/>
+    <inherits name="aarogya.selfToolkit.SPLApplicableWithOption"/>
+    <inherits name="aarogya.selfToolkit.ModifyReason"/>
+    <inherits name="aarogya.selfToolkit.PatientSearchRoomWise"/>
+    <inherits name="aarogya.selfToolkit.OrganizationPopup"/>
+    <inherits name="aarogya.selfToolkit.ClaimIdPopup"/>
+    <inherits name="aarogya.selfToolkit.UHIDDuplicacy"/>
+    <inherits name="aarogya.selfToolkit.PatientRequisition"/>
+    <inherits name="aarogya.selfToolkit.UhidPopup"/>
+    <inherits name="aarogya.selfToolkit.LabRequisition"/>
+    <inherits name="aarogya.selfToolkit.LabApproval"/>
+    <inherits name="aarogya.selfToolkit.OPDQueueDisplay"/>
+    <inherits name="aarogya.selfToolkit.OPDSearch"/>
+    <inherits name="aarogya.selfToolkit.CustomFieldPopup"/>
+    <inherits name="aarogya.selfToolkit.DiscountPopup"/>
+    <inherits name="aarogya.selfToolkit.RemarkPopup"/>
+    <inherits name="aarogya.selfToolkit.ItemPropertyPopup"/>
+    <inherits name="aarogya.selfToolkit.ItemUpdatePopup"/>
+    <!--    <inherits name="aarogya.selfToolkit.Gst"/>-->
+    <inherits name="aarogya.selfToolkit.ItemBatch"/>
+    <inherits name="aarogya.selfToolkit.ToolTip"/>
+    <inherits name="aarogya.selfToolkit.Allergy"/>
+    <inherits name="aarogya.selfToolkit.PatientSchedule"/>
+    <!--    <inherits name="aarogya.selfToolkit.FamilyHistory"/>
+    <inherits name="aarogya.selfToolkit.Habit"/>
+    <inherits name="aarogya.selfToolkit.HistoryOfPastIllness"/>
+    <inherits name="aarogya.selfToolkit.HistoryOfPresentIllness"/>-->
+    <inherits name="aarogya.selfToolkit.InvestigationAdvise"/>
+    <inherits name="aarogya.selfToolkit.MedicineAdvise"/>
+    <!--    <inherits name="aarogya.selfToolkit.PatientComplaint"/>
+    <inherits name="aarogya.selfToolkit.PatientComorbid"/>
+    <inherits name="aarogya.selfToolkit.PhysicalExamination"/>-->
+    <inherits name="aarogya.selfToolkit.PharmacyDiscountPopup"/>
+    <!--<inherits name="aarogya.selfToolkit.PrescriptionDetailMast"/>-->
+    <inherits name="aarogya.selfToolkit.PrescriptionCustomItem"/>
+    <inherits name="aarogya.selfToolkit.TaxSummary"/>
+    <inherits name="aarogya.selfToolkit.FifoPopUp"/>
+    <inherits name="aarogya.selfToolkit.PatientSchedulePopup"/>
+    <inherits name="aarogya.selfToolkit.StickerPrintPopup"/>
+    <inherits name="aarogya.selfToolkit.PatientNameEditing"/>
+    <inherits name="aarogya.selfToolkit.AppointmentSearch"/>
+    <inherits name="aarogya.selfToolkit.MedicineSubstituteSearch"/>
+    <inherits name="aarogya.selfToolkit.CustomMultiLine"/>
+    <inherits name="aarogya.selfToolkit.PermanentAddressPopup"/>
+    <inherits name="aarogya.selfToolkit.PassportInfo"/>
+    <inherits name="aarogya.selfToolkit.WalletSystem"/>
+    <inherits name="aarogya.selfToolkit.ServiceGrid"/>
+    <inherits name="aarogya.selfToolkit.StockDetailPopup"/>
+    <inherits name="aarogya.selfToolkit.IPLApplicableWithOption"/>
+    <inherits name="aarogya.selfToolkit.OTPatientSearch"/>
+    <inherits name="aarogya.selfToolkit.PharmacyDiscountLineWise"/>
+    <inherits name="aarogya.selfToolkit.WholeSaleBillSearchPopup"/>
+        
+    <source path = "self/client"/>
+    <source path = "self/shared"/>
+</module>

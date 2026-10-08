@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/JindalPharmacy.iml" filepath="$PROJECT_DIR$/.idea/JindalPharmacy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aarogya/aarogya.iml" filepath="$PROJECT_DIR$/aarogya/aarogya.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dashBoard/dashBoard.iml" filepath="$PROJECT_DIR$/dashBoard/dashBoard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/inventory/inventory.iml" filepath="$PROJECT_DIR$/inventory/inventory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/master/master.iml" filepath="$PROJECT_DIR$/master/master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mis/mis.iml" filepath="$PROJECT_DIR$/mis/mis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nabh/nabh.iml" filepath="$PROJECT_DIR$/nabh/nabh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pharmacy/pharmacy.iml" filepath="$PROJECT_DIR$/pharmacy/pharmacy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/projectMenu/projectMenu.iml" filepath="$PROJECT_DIR$/projectMenu/projectMenu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/selfToolkit/selfToolkit.iml" filepath="$PROJECT_DIR$/selfToolkit/selfToolkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stPlugin/stPlugin.iml" filepath="$PROJECT_DIR$/stPlugin/stPlugin.iml" />
+    </modules>
+  </component>
+</project>

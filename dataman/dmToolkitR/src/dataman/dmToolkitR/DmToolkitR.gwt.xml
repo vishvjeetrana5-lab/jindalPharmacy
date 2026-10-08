@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="org.gwtbootstrap3.extras.notify.NotifyNoResources"/>
+    <inherits name="org.gwtbootstrap3.extras.bootbox.Bootbox"/>
+    <inherits name="dataman.dmBase.DmBase"/>
+    
+    <inherits name="dataman.dmToolkitR.Self"/>
+    <inherits name="dataman.dmToolkitR.DmStatic"/>
+    <inherits name="dataman.dmToolkitR.IsWidgetExtended"/>
+    <inherits name="dataman.dmToolkitR.DmPageHelp"/>
+    <inherits name="dataman.dmToolkitR.DmTextBox"/>
+    <inherits name="dataman.dmToolkitR.DmTextHelp"/>
+    <inherits name="dataman.dmToolkitR.DmTextArea"/>
+    <inherits name="dataman.dmToolkitR.DmGrid"/>
+    <inherits name="dataman.dmToolkitR.DmGridPaging"/>
+    <inherits name="dataman.dmToolkitR.DmGridHelp"/>
+    <inherits name="dataman.dmToolkitR.DmLabel"/>
+    <inherits name="dataman.dmToolkitR.DmPopupPanel"/>
+    <inherits name="dataman.dmToolkitR.DmGridEditPanel"/>
+    <inherits name="dataman.dmToolkitR.OpenSourceReport"/>
+    <inherits name="dataman.dmToolkitR.DmReportLayout"/>
+    <inherits name="dataman.dmToolkitR.DmConfirmBox"/>
+    <inherits name="dataman.dmToolkitR.DmAlertBox"/>
+    <inherits name="dataman.dmToolkitR.DmTextBoxNumeric"/>
+    <inherits name="dataman.dmToolkitR.DmGUI"/>
+    <inherits name="dataman.dmToolkitR.DmButton"/>
+    <inherits name="dataman.dmToolkitR.DmDatePicker"/>
+    <inherits name="dataman.dmToolkitR.DmNotify"/>
+    <inherits name="dataman.dmToolkitR.DmImageCanvas" />
+    <inherits name="dataman.dmToolkitR.DmFileManager"/>
+    <inherits name="dataman.dmToolkitR.DmFileUploader" />
+    <inherits name="dataman.dmToolkitR.DmColorPicker" />
+    <inherits name="dataman.dmToolkitR.DmMultiLine" />
+    <inherits name="org.gwtbootstrap3.extras.slider.Slider"/>
+    <inherits name="dataman.dmToolkitR.PrinterMapping"/>
+    
+    
+    <source path = "self/client"/>
+</module>

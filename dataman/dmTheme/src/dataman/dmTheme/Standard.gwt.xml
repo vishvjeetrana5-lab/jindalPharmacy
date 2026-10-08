@@ -1,0 +1,6 @@
+<module>    
+    <inherits name="dataman.dmTheme.GwtStandard"/>
+    <inherits name="dataman.dmTheme.DmStandard"/>
+    <inherits name="dataman.dmTheme.DmStandardLogin"/>
+</module>
+

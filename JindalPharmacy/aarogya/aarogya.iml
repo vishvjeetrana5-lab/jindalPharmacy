@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="nabh" />
+    <orderEntry type="module" module-name="inventory" />
+    <orderEntry type="module" module-name="selfToolkit" />
+    <orderEntry type="module" module-name="master" />
+    <orderEntry type="module" module-name="dashBoard" />
+    <orderEntry type="module" module-name="mis" />
+    <orderEntry type="module" module-name="pharmacy" />
+    <orderEntry type="module" module-name="projectMenu" />
+  </component>
+</module>

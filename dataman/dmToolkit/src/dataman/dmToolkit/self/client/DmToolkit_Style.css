@@ -1,0 +1,30 @@
+.dmTopControl 
+{
+    line-height: 10px !important;
+    width:100% !important;
+}
+
+.dmTopControl button 
+{    
+    margin:0px !important;
+    padding:0px !important;
+    height: 25px !important;
+    font-size: 11px !important;
+}
+
+.dmTopControl button div
+{ 
+    float: left !important;
+    padding-bottom: 2px !important;
+    padding-left: 3px !important;
+}
+
+.dmTopControl button img
+{
+    border: 0px !important;
+    height: 12px !important;
+    float: left !important;
+    padding-top: 2px !important;
+    padding-top: 1px !important;
+    padding-left: 1px !important;
+}

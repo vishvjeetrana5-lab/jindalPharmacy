@@ -1,0 +1,19 @@
+package dataman.payroll.reports.shared;
+
+import com.google.gwt.user.client.rpc.RemoteService;
+import dataman.dmBase.self.shared.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+public interface AccountGroupMergeLedger_Srv extends RemoteService {
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHSiteName(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<KeyFieldExtended>> getTxtHContraACNeeded(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<AccountGroupMergeLedger_Model.TxtHAccountGroup>> getTxtHAccountGroup(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResultPageing<List<AccountGroupMergeLedger_Model.TxtHVoucherType>> getTxtHVoucherTyep(DmHelper helper, boolean blnToEndOfFile);
+
+    public DmResult<String> execute(LinkedHashMap<String, FieldUDT_Mdl> filter, DmReportProperty_Mdl reportProperty);
+}

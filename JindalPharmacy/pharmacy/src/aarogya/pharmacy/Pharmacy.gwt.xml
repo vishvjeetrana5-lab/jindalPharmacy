@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="dataman.dmToolkit.DmToolkit"/>
+    <inherits name="dataman.dmBase.DmBase"/>
+    <inherits name="aarogya.pharmacy.MedicineCategoryMaster"/>
+    <inherits name="aarogya.pharmacy.MedicineGroupMaster"/>
+    <inherits name="aarogya.pharmacy.MedicineMakeMaster"/>
+    <inherits name="aarogya.pharmacy.OperationMediMaster"/>
+    <inherits name="aarogya.pharmacy.Indent"/>
+    <inherits name="aarogya.pharmacy.IndentApproval"/>
+    <inherits name="aarogya.pharmacy.MedicineMaster"/>
+    <inherits name="aarogya.pharmacy.EmployeeMaster"/>
+    <inherits name="aarogya.pharmacy.MedicineOpening"/>
+    <inherits name="aarogya.pharmacy.MedicineReceive"/>
+    <inherits name="aarogya.pharmacy.MedicineIssue"/>
+    <inherits name="aarogya.pharmacy.MedicineTransfer"/>
+    <inherits name="aarogya.pharmacy.MedicineTransferApproval"/>
+    <inherits name="aarogya.pharmacy.MedicineInTransit"/>
+    <inherits name="aarogya.pharmacy.SaleBill"/>
+    <inherits name="aarogya.pharmacy.SaleBillReturn"/>
+    <inherits name="aarogya.pharmacy.UnitMaster"/>
+    <inherits name="aarogya.pharmacy.Requisition"/>
+    <inherits name="aarogya.pharmacy.RequisitionApproval"/>
+    <inherits name="aarogya.pharmacy.Reports"/>
+    <inherits name="aarogya.pharmacy.IndentSearch"/>
+    <inherits name="aarogya.pharmacy.PurchaseOrderApproval"/>
+    <inherits name="aarogya.pharmacy.PurchaseOrder"/>
+    <inherits name="aarogya.pharmacy.RequisitionSearch"/>
+    <inherits name="aarogya.pharmacy.RequisitionItemDetails"/>
+    <inherits name="aarogya.pharmacy.PharmacyReceipt"/>
+    <inherits name="aarogya.pharmacy.GRNSearch"/>
+    <inherits name="aarogya.pharmacy.PurchaseBill"/>
+    <inherits name="aarogya.pharmacy.PurchaseBillDirect"/>
+    <inherits name="aarogya.pharmacy.GRN"/>
+    <inherits name="aarogya.pharmacy.PurchaseReturn"/>
+    <inherits name="aarogya.pharmacy.OrderSearch"/>
+    <inherits name="aarogya.pharmacy.StockSummary"/>
+    <inherits name="aarogya.pharmacy.AddBatchSingle"/>
+    <inherits name="aarogya.pharmacy.StockLedger"/>
+    <inherits name="aarogya.pharmacy.StockBatch"/>
+    <inherits name="aarogya.pharmacy.GRNApproval"/>
+    <inherits name="aarogya.pharmacy.PurchaseBillApproval"/>
+    <inherits name="aarogya.pharmacy.PurchaseReturnApproval"/>
+    <inherits name="aarogya.pharmacy.MedicineCompositionMaster"/>
+    <inherits name="aarogya.pharmacy.ProfitSlab"/>
+    <inherits name="aarogya.pharmacy.Enquiry"/>
+    <inherits name="aarogya.pharmacy.EnquiryApproval"/>
+    <inherits name="aarogya.pharmacy.Quotation"/>
+    <inherits name="aarogya.pharmacy.BatchNo"/>
+    <inherits name="aarogya.pharmacy.PharmacyRefund"/>
+    <inherits name="aarogya.pharmacy.PartySearch"/>
+    <inherits name="aarogya.pharmacy.WalkInSearch"/>
+    <inherits name="aarogya.pharmacy.LedgerMaster"/>
+    <inherits name="aarogya.pharmacy.LedgerPopup"/>
+    <inherits name="aarogya.pharmacy.SaleBillItemSearch"/>
+    <inherits name="aarogya.pharmacy.PhysicalStock"/>
+    <inherits name="aarogya.pharmacy.PhysicalStockPosting"/>
+    <inherits name="aarogya.pharmacy.PhysicalStockClearance"/>
+    <inherits name="aarogya.pharmacy.SchemeMaster"/>
+    <inherits name="aarogya.pharmacy.MedicineSearch"/>
+    <inherits name="aarogya.pharmacy.MedicineRequirement"/>
+    <inherits name="aarogya.pharmacy.PharmacyFinalDiscountEntry"/>
+    <inherits name="aarogya.pharmacy.EnvironmentSettingSite"/>
+    <inherits name="aarogya.pharmacy.OrganizationBillingOnRateMaster"/>
+    <inherits name="aarogya.pharmacy.MedicineDepartmentInfo"/>
+    <inherits name="aarogya.pharmacy.MedicineModification"/>
+    <inherits name="aarogya.pharmacy.CustomerMaster"/>
+    <inherits name="aarogya.pharmacy.ChangePaymentSource"/>
+    <inherits name="aarogya.pharmacy.SaleBillSearch"/>
+    <inherits name="aarogya.pharmacy.MedicineTemplateMaster"/>
+    <inherits name="aarogya.pharmacy.MedicineRequisitionDisplay"/>
+    <inherits name="aarogya.pharmacy.SaleBillWholeSale"/>     
+    <inherits name="aarogya.pharmacy.MedicineTransferWholeSale"/>     
+    <inherits name="aarogya.pharmacy.MedicineIndentDisplay"/>
+    <inherits name="aarogya.pharmacy.SaleBillReturnProvisional"/>    
+    <inherits name="aarogya.pharmacy.IndentClose"/>    
+    <inherits name="aarogya.pharmacy.MaterialCategoryMast"/>
+    
+    <inherits name="aarogya.pharmacy.BarcodeGeneration"/>
+    <inherits name="aarogya.pharmacy.DuplicateBarcodeGeneration"/>
+    
+    <inherits name="aarogya.pharmacy.ProcurementPlannerDisplay"/>
+    
+    <inherits name="aarogya.pharmacy.PendingPODisplay"/>
+    <inherits name="aarogya.pharmacy.RequisitionClose"/>
+    <inherits name="aarogya.pharmacy.PurchaseOrderClose"/>
+    <inherits name="aarogya.pharmacy.ExpiryModification"/>
+    <inherits name="aarogya.pharmacy.VendorMaster"/>
+    <inherits name="aarogya.pharmacy.WholeSaleBillSettelement"/>
+    <inherits name="aarogya.pharmacy.WholeSalePaymentRecipt"/>
+    <inherits name="aarogya.pharmacy.WholeSaleBillReturn"/>
+    <inherits name="aarogya.pharmacy.WholeSaleReports"/>
+    <inherits name="aarogya.pharmacy.WholeSaleSetting"/>
+    <inherits name="aarogya.pharmacy.VehicleTypeMaster"/>
+    <inherits name="aarogya.pharmacy.AdditionalPlaceOfBusiness"/>
+    <inherits name="aarogya.pharmacy.EgstParam"/>
+    <inherits name="aarogya.pharmacy.IrpInfoPopup"/>
+    
+    
+    <inherits name="aarogya.pharmacy.ProformaPurchaseReturn"/>
+    <inherits name="aarogya.pharmacy.PurchaseBillSearch"/>
+    <inherits name="aarogya.pharmacy.D365StockIssueReceive"/>
+    
+    
+    <source path = "self/client"/>
+    <source path = "self/shared"/>
+</module>

@@ -1,0 +1,330 @@
+package aarogya.inventory.self.shared;
+
+import aarogya.inventory.workBillDirect.client.WorkBillDirect;
+import aarogya.inventory.divisionMaster.client.DivisionMaster;
+import aarogya.inventory.enquiry.client.Enquiry;
+import aarogya.inventory.gateIn.client.GateIn;
+import aarogya.inventory.gateOut.client.GateOut;
+import aarogya.inventory.grn.client.Grn;
+import aarogya.inventory.indent.client.Indent;
+import aarogya.inventory.itemIssue.client.ItemIssue;
+import aarogya.inventory.itemOpening.client.ItemOpening;
+import aarogya.inventory.itemReceive.client.ItemReceive;
+import aarogya.inventory.wipToStockConversion.client.WipToStockConversion;
+import aarogya.inventory.itemTransfer.client.ItemTransfer;
+import aarogya.inventory.manufacturerMaster.client.ManufacturerMaster;
+import aarogya.inventory.physicalStock.client.PhysicalStock;
+import aarogya.inventory.physicalStockClearance.client.PhysicalStockClearance;
+import aarogya.inventory.physicalStockPosting.client.PhysicalStockPosting;
+import aarogya.inventory.purchaseBill.client.PurchaseBill;
+import aarogya.inventory.purchaseBillDirect.client.PurchaseBillDirect;
+import aarogya.inventory.purchaseOrder.client.PurchaseOrder;
+import aarogya.inventory.purchaseReturn.client.PurchaseReturn;
+import aarogya.inventory.quotation.client.Quotation;
+import aarogya.projectMenu.self.shared.pmInventory;
+import aarogya.inventory.requisition.client.Requisition;
+import aarogya.inventory.supplierMaster.client.SupplierMaster;
+import aarogya.inventory.workOrder.client.WorkOrder;
+import aarogya.inventory.gstServiceMaster.client.GstServiceMaster;
+import aarogya.inventory.visitorGatePass.client.VisitorGatePass;
+import dataman.dmBase.self.shared.UserMenu;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Inventory_Model {
+
+    private pmInventory pmMenu = new pmInventory();
+
+    public List<UserMenu> getMenu() {
+        List<UserMenu> menuList = new ArrayList<>();
+        List<UserMenu> mainMenuList = new ArrayList<>();
+
+        menuList.add(new UserMenu("Masters"));
+        mainMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+        getGeneral(mainMenuList);
+
+        menuList.add(new UserMenu("Transaction"));
+        mainMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+        getGeneralTransaction(mainMenuList);
+        getBilling(mainMenuList);
+        getStores(mainMenuList);
+        getStockAudit(mainMenuList);
+        getApprovals(mainMenuList);
+        getGate(mainMenuList);
+
+        menuList.add(new UserMenu("Reports"));
+        mainMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+        getDisplay(mainMenuList);
+        getReports(mainMenuList);
+
+        menuList.add(new UserMenu("Configs"));
+        mainMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+        getAdmin(mainMenuList);
+
+        return menuList;
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="Gate">
+    private void getGate(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("Gate"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.GATE_PASS_IN.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(GateIn.gateOutByBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(GateIn.dateTimeEditableBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.GATE_PASS_OUT.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(GateOut.gateOutByBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(GateOut.dateTimeEditableBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.VISITOR_GATE_PASS.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(VisitorGatePass.dateTimeEditableBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(VisitorGatePass.gateOutByBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.GATE_PASS_OUT_REGISTER.caption));
+    }
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="General">
+    private void getGeneral(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("General"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.UNIT_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_SPECIALITY_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_COLOUR_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_SIZE_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_MAKE_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_MARKETING_COMPANY.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_CATEGORY_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.MATERIAL_TYPE_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_MODEL_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_STRENGTH_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.MATERIAL_CATEGORY_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_GROUP_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_MASTER.caption));
+
+        subMenuList.add(new UserMenu(pmMenu.SUPPLIER_MASTER.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(SupplierMaster.attachFileBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(SupplierMaster.deleteFileBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(SupplierMaster.detailBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(SupplierMaster.detail2Blog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(SupplierMaster.detail3Blog);
+
+        subMenuList.add(new UserMenu(pmMenu.SERVICE_OVERHEAD_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.PROJECT_MASTER.caption));
+    }
+//</editor-fold>
+//</editor-fold>
+
+    private void getGeneralTransaction(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("General Transaction"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.REQUISITION.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(Requisition.approvedByBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.INDENT.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(Indent.approvedByBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.ENQUIRY.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(Enquiry.approvedByBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.QUOTATION.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(Quotation.attachFileBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(Quotation.deleteFileBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_ORDER.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseOrder.approvedByBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.WORK_ORDER.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(WorkOrder.approvedByBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.PROJECT_INDICATOR.caption));
+
+    }
+
+//<editor-fold defaultstate="collapsed" desc="Billing">
+    private void getBilling(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("Purchase"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_BILL.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseBill.approvedByBlog);
+//        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseBill.attachFileBlog);
+//        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseBill.deleteFileBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_BILL_DIRECT.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseBillDirect.approvedByBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseBillDirect.departmentEditableBlog);
+//        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseBillDirect.attachFileBlog);
+//        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseBillDirect.deleteFileBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_RETURN.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseReturn.approvedByBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseReturn.departmentEditableBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.GRN.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(Grn.approvedByBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(Grn.departmentEditableBlog);
+//        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(Grn.attachFileBlog);
+//        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(Grn.deleteFileBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.WORK_BILL.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(WorkBillDirect.approvedByBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(WorkBillDirect.departmentEditableBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(WorkBillDirect.attachFileBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(WorkBillDirect.deleteFileBlog);
+    }
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="Stores">
+    private void getStores(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("Stores"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.ITEM_OPENING.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ItemOpening.departmentEditableBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.ITEM_RECEIVE.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ItemReceive.departmentEditableBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ItemReceive.dateEditableBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.ITEM_ISSUE.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ItemIssue.departmentEditableBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ItemIssue.dateEditableBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.ITEM_TRANSFER.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ItemTransfer.departmentEditableBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ItemTransfer.dateEditableBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ItemTransfer.approvedByBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.WIP_TO_STOCK_CONVERSION.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(WipToStockConversion.departmentEditableBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(WipToStockConversion.dateEditableBlog);
+    }
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="Stock Audit">
+    private void getStockAudit(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("Stock Audit"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.PHYSICAL_STOCK.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PhysicalStock.departmentEditableBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.PHYSICAL_STOCK_POSTING.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PhysicalStockPosting.postedByBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.PHYSICAL_STOCK_CLEARANCE.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PhysicalStockClearance.postedByBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.PHYSICAL_STOCK_BEFORE_POSTING_REPROT.caption));
+    }
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="Approvals">
+    private void getApprovals(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("Approvals"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.REQUISITION_APPROVAL.caption));
+        subMenuList.add(new UserMenu(pmMenu.INDENT_APPROVAL.caption));
+        subMenuList.add(new UserMenu(pmMenu.ENQUIRY_APPROVAL.caption));
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_ORDER_APPROVAL.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(PurchaseOrderApproval.unApproved);
+        subMenuList.add(new UserMenu(pmMenu.GRN_APPROVAL.caption));
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_BILL_APPROVAL.caption));
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_BILL_RETURN_APPROVAL.caption));
+        subMenuList.add(new UserMenu(pmMenu.INDENT_CLOSE.caption));
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_ORDER_CLOSE.caption));
+        subMenuList.add(new UserMenu(pmMenu.REQUISITION_CLOSE.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_TRANSFER_APPROVAL.caption));
+    }
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="Display">
+    private void getDisplay(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("Display"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.STOCK_SUMMARY_DISPLAY.caption));
+        subMenuList.add(new UserMenu(pmMenu.STOCK_LEDGER_DISPLAY.caption));
+        subMenuList.add(new UserMenu(pmMenu.STOCK_BATCH_DISPLAY.caption));
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_ORDER_DISPLAY.caption));
+        subMenuList.add(new UserMenu(pmMenu.PROCUREMENT_PLANNER_DISPLAY.caption));
+        subMenuList.add(new UserMenu(pmMenu.PENDING_PURCHASE_ORDER_DISPLAY.caption));
+    }
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="Reports">
+    private void getReports(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("General Reports"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.REQUISITION_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.INDENT_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ENQUIRY_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.QUOTATION_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_ORDER_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.GRN_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.PURCHASE_RETURN_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_OPENING_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_RECEIVE_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_ISSUE_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_TRANSFER_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.STOCK_LEDGER.caption));
+        subMenuList.add(new UserMenu(pmMenu.STOCK_SUMMARY.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_STOCK_VALUATION.caption));
+        subMenuList.add(new UserMenu(pmMenu.ITEM_EXPIRY_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.GST_PURCHASE_REGISTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.NON_MOVING_ITEM_REGISTER.caption));
+
+        subMenuList.add(new UserMenu(pmMenu.PENDING_GRN_CONTROL_AC_REGISTER.caption));
+
+        subMenuList.add(new UserMenu(pmMenu.PO_RELEASE_AMOUNT_WITH_CD.caption));
+        subMenuList.add(new UserMenu(pmMenu.PB_Value_REGISTER.caption));
+    }
+//</editor-fold>
+
+    private void getAdmin(List<UserMenu> menuList) {
+        List<UserMenu> subMenuList;
+
+        menuList.add(new UserMenu("Admin"));
+        subMenuList = menuList.get(menuList.size() - 1).getUserMenu();
+
+        subMenuList.add(new UserMenu(pmMenu.OVERHEAD_ITEM_MASTER.caption));
+        subMenuList.add(new UserMenu(pmMenu.IMPURITY_MASTER.caption));
+
+        subMenuList.add(new UserMenu(pmMenu.MANUFACTURER_MASTER.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ManufacturerMaster.attachFileBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(ManufacturerMaster.deleteFileBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.DIVISION_MASTER.caption));
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(DivisionMaster.attachFileBlog);
+        subMenuList.get(subMenuList.size() - 1).getControlPermission().add(DivisionMaster.deleteFileBlog);
+
+        subMenuList.add(new UserMenu(pmMenu.ITEM_DEPARTMENT_INFO.caption));
+
+    }
+
+}

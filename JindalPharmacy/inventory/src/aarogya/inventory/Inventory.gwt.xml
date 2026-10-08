@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="dataman.dmToolkit.DmToolkit"/>
+    <inherits name="dataman.dmBase.DmBase"/>
+    
+    <inherits name="aarogya.inventory.UnitMaster"/>
+    <inherits name="aarogya.inventory.ItemMakeMaster"/>
+    <inherits name="aarogya.inventory.ItemCategoryMaster"/>
+    <inherits name="aarogya.inventory.ItemGroupMaster"/>
+    <inherits name="aarogya.inventory.ItemMaster"/>
+    <inherits name="aarogya.inventory.OverHeadItemMaster"/>
+    <inherits name="aarogya.inventory.Indent"/>
+    <inherits name="aarogya.inventory.IndentApproval"/>
+    <inherits name="aarogya.inventory.Quotation"/>
+    <inherits name="aarogya.inventory.PurchaseOrder"/>
+    <inherits name="aarogya.inventory.PurchaseOrderApproval"/>
+    <inherits name="aarogya.inventory.Enquiry"/>
+    <inherits name="aarogya.inventory.EnquiryApproval"/>
+    <inherits name="aarogya.inventory.IndentSearch"/>
+    <inherits name="aarogya.inventory.Reports"/>
+    <inherits name="aarogya.inventory.GRNSearch"/>
+    <inherits name="aarogya.inventory.PurchaseBill"/>
+    <inherits name="aarogya.inventory.PurchaseBillDirect"/>
+    <inherits name="aarogya.inventory.PurchaseReturn"/>
+    <inherits name="aarogya.inventory.GRN"/>
+    <inherits name="aarogya.inventory.OrderSearch"/>
+    <inherits name="aarogya.inventory.GRNApproval"/>
+    <inherits name="aarogya.inventory.PurchaseBillApproval"/>
+    <inherits name="aarogya.inventory.PurchaseReturnApproval"/>
+    <inherits name="aarogya.inventory.PhysicalStock"/>
+    <inherits name="aarogya.inventory.PhysicalStockPosting"/>
+    <inherits name="aarogya.inventory.PhysicalStockClearance"/>
+    
+    <inherits name="aarogya.inventory.ManufacturerMaster"/>
+    <inherits name="aarogya.inventory.DivisionMaster"/>
+    <inherits name="aarogya.inventory.SupplierMaster"/>
+    
+    <inherits name="aarogya.inventory.Requisition"/>
+    <inherits name="aarogya.inventory.RequisitionApproval"/>
+    <inherits name="aarogya.inventory.ItemOpening"/>
+    <inherits name="aarogya.inventory.ItemReceive"/>
+    <inherits name="aarogya.inventory.ItemIssue"/>
+    <inherits name="aarogya.inventory.ItemTransfer"/>
+    <inherits name="aarogya.inventory.RequisitionSearch"/>
+    <inherits name="aarogya.inventory.StockLedger"/>
+    <inherits name="aarogya.inventory.StockSummary"/>
+    <inherits name="aarogya.inventory.StockBatch"/>
+    <inherits name="aarogya.inventory.Reports"/>
+    <inherits name="aarogya.inventory.ItemDepartmentInfo"/>
+    <inherits name="aarogya.inventory.WorkOrder"/>
+    <inherits name="aarogya.inventory.ServiceOverHeadMaster"/>
+    <inherits name="aarogya.inventory.GstServiceMaster"/>
+    <inherits name="aarogya.inventory.WorkBillDirect"/>
+    <inherits name="aarogya.inventory.GateOut"/>
+    <inherits name="aarogya.inventory.VisitorGatePassSearch"/>
+    <inherits name="aarogya.inventory.VisitorGatePass"/>
+    <inherits name="aarogya.inventory.GateInSearch"/>
+    <inherits name="aarogya.inventory.GateIn"/>
+    <inherits name="aarogya.inventory.GateOutSearch"/>
+    <inherits name="aarogya.inventory.PurchaseOrderDisplay"/>
+    <inherits name="aarogya.inventory.IndentClose"/>    
+    <inherits name="aarogya.inventory.ProjectMaster"/>    
+    <inherits name="aarogya.inventory.PurchaseOrderClose"/>    
+    <inherits name="aarogya.inventory.RequisitionClose"/>    
+    <inherits name="aarogya.inventory.ItemTransferApproval"/>    
+    <inherits name="aarogya.inventory.PurchaseOrderClose"/>
+    <inherits name="aarogya.inventory.WipToStockConversion"/>    
+    <inherits name="aarogya.inventory.ProjectIndicator"/>    
+    <inherits name="aarogya.inventory.PendingPODisplay"/>    
+    
+    <source path = "self/client"/>
+    <source path = "self/shared"/>
+</module>

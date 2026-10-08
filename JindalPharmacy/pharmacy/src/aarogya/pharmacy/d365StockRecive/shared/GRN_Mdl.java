@@ -1,0 +1,595 @@
+package aarogya.pharmacy.d365StockRecive.shared;
+
+import dataman.dmToolkit.modifyReason.shared.ModifyReason_Mdl;
+import com.google.gwt.user.client.rpc.IsSerializable;
+import dataman.dmToolkit.overHead.shared.OverHead_Mdl;
+import dataman.dmBase.self.shared.*;
+import dataman.dmBase.self.shared.RecId;
+import dataman.dmToolkit.dmGUI.shared.DmGUIRow_Mdl;
+import dataman.dmToolkit.dmGUI.shared.DmGUI_Mdl;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class GRN_Mdl extends KeyField implements Serializable, IsSerializable {
+
+    private RecId recIdGRN = new RecId();
+    private String wtaCode;
+    private String voucherTypeCode;
+    private String voucherTypeName;
+    private String voucherCategory;
+    private String voucherDate;
+    private String supplierGstin;
+    private String supplierGstinDate;
+    private String supplierStateCode;
+    private String supplierTag;
+    private String supplierText;
+    private String challanNo;
+    private String challanDate;
+    private String remark;
+    private String departmentTag;
+    private String departmentText;
+    private String approvedBy;
+    private String approvedDateTime;
+    private String partyTypeForEntry;
+    private String partyType;
+    private String rcmApplicable;
+    private String u_EntDt_LatestLine;
+    private String lineItemCodesCsv;
+    private String poItemChangeCondition;
+
+    private String lastTransactionDate;
+    private boolean isPurchaseOrderExists;
+
+    // Tax
+    private String grossAmount;
+    private String goodsGrossAmt;
+    private String serviceGrossAmt;
+    private String discount;
+    private String goodsTaxableAmt;
+    private String serviceTaxableAmt;
+    private String taxableAmt;
+    private String sgstUgst;
+    private String sgst;
+    private String ugst;
+    private String cgst;
+    private String igst;
+    private String subTotal;
+    private String finalDiscountPer;
+    private String finalDiscount;
+    private String finalDiscountAcCode;
+    private String totalAmt;
+    private String roundOffAmount;
+    private String roundOffAcCode;
+    private String netAmount;
+    private String landedValue;
+
+    //Site_Code
+    private String siteCode;
+    private String siteName;
+
+    private String placeOfSupply;
+    private String placeOfSupplycode;
+
+    private DefaultValue_Mdl defaultValueMdl;
+    private ModifyReason_Mdl modifyReasonMdl;
+    private String guiConfigCode;
+    private DmGUI_Mdl guiMdl = new DmGUI_Mdl();
+    private List<GrdGrnDetail_Mdl> grdGrnDetail = new ArrayList<GrdGrnDetail_Mdl>();
+    private List<OverHead_Mdl> overHeadList = new ArrayList<OverHead_Mdl>();
+
+    public GRN_Mdl() {
+    }
+
+    public GRN_Mdl clone() {
+        GRN_Mdl grn_Mdl = new GRN_Mdl();
+
+        copy(grn_Mdl);
+
+        return grn_Mdl;
+    }
+
+    public void copy(GRN_Mdl grn_Mdl) {
+        grn_Mdl.setSharedKeyFieldCode(this.getSharedKeyFieldCode());
+        grn_Mdl.setSharedKeyFieldName(this.getSharedKeyFieldName());
+        grn_Mdl.setApprovedBy(this.getApprovedBy());
+        grn_Mdl.setApprovedDateTime(this.getApprovedDateTime());
+        grn_Mdl.setChallanDate(this.getChallanDate());
+        grn_Mdl.setChallanNo(this.getChallanNo());
+        grn_Mdl.setDepartmentTag(this.getDepartmentTag());
+        grn_Mdl.setDepartmentText(this.getDepartmentText());
+        grn_Mdl.setGuiMdl(this.getGuiMdl());
+        grn_Mdl.setGuiConfigCode(this.getGuiConfigCode());
+        grn_Mdl.setModifyReasonMdl(this.getModifyReasonMdl());
+        grn_Mdl.setRecIdGRN(this.getRecIdGRN());
+        grn_Mdl.setRemark(this.getRemark());
+        grn_Mdl.setSupplierTag(this.getSupplierTag());
+        grn_Mdl.setSupplierText(this.getSupplierText());
+        grn_Mdl.setSupplierGstin(this.getSupplierGstin());
+        grn_Mdl.setSupplierGstinDate(this.getSupplierGstinDate());
+        grn_Mdl.setVoucherDate(this.getVoucherDate());
+        grn_Mdl.setVoucherTypeCode(this.getVoucherTypeCode());
+        grn_Mdl.setVoucherTypeName(this.getVoucherTypeName());
+        grn_Mdl.setVoucherCategory(this.getVoucherCategory());
+        grn_Mdl.setWtaCode(this.getWtaCode());
+        grn_Mdl.setPartyTypeForEntry(this.getPartyTypeForEntry());
+        grn_Mdl.setPartyType(this.getPartyType());
+        grn_Mdl.setRcmApplicable(this.getRcmApplicable());
+        grn_Mdl.setPlaceOfSupply(this.getPlaceOfSupply());
+        grn_Mdl.setRoundOffAmount(this.getRoundOffAmount());
+        grn_Mdl.setNetAmount(this.getNetAmount());
+        grn_Mdl.setU_EntDt_LatestLine(this.getU_EntDt_LatestLine());
+        grn_Mdl.setLineItemCodesCsv(this.getLineItemCodesCsv());
+        grn_Mdl.setPoItemChangeCondition(this.getPoItemChangeCondition());
+        grn_Mdl.setGrossAmount(this.getGrossAmount());
+        grn_Mdl.setIsPurchaseOrderExists(this.getIsPurchaseOrderExists());
+        grn_Mdl.setDefaultValueMdl(this.getDefaultValueMdl());
+        grn_Mdl.getGrdGrnDetail().addAll(cloneGrdGrnDetailList(this.getGrdGrnDetail()));
+    }
+
+    public List<GrdGrnDetail_Mdl> cloneGrdGrnDetailList(List<GrdGrnDetail_Mdl> list) {
+        List<GrdGrnDetail_Mdl> grdGrn_MdlList = null;
+
+        if (list != null) {
+            grdGrn_MdlList = new ArrayList();
+            for (int i = 0; i < list.size(); i++) {
+                grdGrn_MdlList.add(list.get(i).clone());
+            }
+        }
+
+        return grdGrn_MdlList;
+    }
+
+    public ModifyReason_Mdl getModifyReasonMdl() {
+        return modifyReasonMdl;
+    }
+
+    public void setModifyReasonMdl(ModifyReason_Mdl modifyReasonMdl) {
+        this.modifyReasonMdl = modifyReasonMdl;
+    }
+
+    public RecId getRecIdGRN() {
+        return recIdGRN;
+    }
+
+    public void setRecIdGRN(RecId recIdGRN) {
+        this.recIdGRN = recIdGRN;
+    }
+
+    public String getWtaCode() {
+        return wtaCode;
+    }
+
+    public void setWtaCode(String wtaCode) {
+        this.wtaCode = wtaCode;
+    }
+
+    public String getVoucherTypeCode() {
+        return voucherTypeCode;
+    }
+
+    public void setVoucherTypeCode(String voucherTypeCode) {
+        this.voucherTypeCode = voucherTypeCode;
+    }
+
+    public String getVoucherTypeName() {
+        return voucherTypeName;
+    }
+
+    public void setVoucherTypeName(String voucherTypeName) {
+        this.voucherTypeName = voucherTypeName;
+    }
+
+    public String getVoucherCategory() {
+        return voucherCategory;
+    }
+
+    public void setVoucherCategory(String voucherCategory) {
+        this.voucherCategory = voucherCategory;
+    }
+
+    public String getVoucherDate() {
+        return voucherDate;
+    }
+
+    public String getSupplierGstin() {
+        return supplierGstin;
+    }
+
+    public void setSupplierGstin(String supplierGstin) {
+        this.supplierGstin = supplierGstin;
+    }
+
+    public String getSupplierGstinDate() {
+        return supplierGstinDate;
+    }
+
+    public void setSupplierGstinDate(String supplierGstinDate) {
+        this.supplierGstinDate = supplierGstinDate;
+    }
+
+    public void setVoucherDate(String voucherDate) {
+        this.voucherDate = voucherDate;
+    }
+
+    public String getSupplierTag() {
+        return supplierTag;
+    }
+
+    public void setSupplierTag(String supplierTag) {
+        this.supplierTag = supplierTag;
+    }
+
+    public String getSupplierText() {
+        return supplierText;
+    }
+
+    public void setSupplierText(String supplierText) {
+        this.supplierText = supplierText;
+    }
+
+    public String getChallanNo() {
+        return challanNo;
+    }
+
+    public void setChallanNo(String challanNo) {
+        this.challanNo = challanNo;
+    }
+
+    public String getChallanDate() {
+        return challanDate;
+    }
+
+    public void setChallanDate(String challanDate) {
+        this.challanDate = challanDate;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getDepartmentTag() {
+        return departmentTag;
+    }
+
+    public void setDepartmentTag(String departmentTag) {
+        this.departmentTag = departmentTag;
+    }
+
+    public String getDepartmentText() {
+        return departmentText;
+    }
+
+    public void setDepartmentText(String departmentText) {
+        this.departmentText = departmentText;
+    }
+
+    public String getApprovedBy() {
+        return approvedBy;
+    }
+
+    public void setApprovedBy(String approvedBy) {
+        this.approvedBy = approvedBy;
+    }
+
+    public String getApprovedDateTime() {
+        return approvedDateTime;
+    }
+
+    public void setApprovedDateTime(String approvedDateTime) {
+        this.approvedDateTime = approvedDateTime;
+    }
+
+    public List<GrdGrnDetail_Mdl> getGrdGrnDetail() {
+        return grdGrnDetail;
+    }
+
+    public void setGrdGrnDetail(List<GrdGrnDetail_Mdl> grdGrnDetail) {
+        this.grdGrnDetail = grdGrnDetail;
+    }
+
+    public List<OverHead_Mdl> getOverHeadList() {
+        return overHeadList;
+    }
+
+    public String getGuiConfigCode() {
+        return guiConfigCode;
+    }
+
+    public void setGuiConfigCode(String guiConfigCode) {
+        this.guiConfigCode = guiConfigCode;
+    }
+
+    public DmGUI_Mdl getGuiMdl() {
+        return guiMdl;
+    }
+
+    public void setGuiMdl(DmGUI_Mdl guiMdl) {
+        this.guiMdl = guiMdl;
+    }
+
+    public String getPartyTypeForEntry() {
+        return partyTypeForEntry;
+    }
+
+    public void setPartyTypeForEntry(String partyTypeForEntry) {
+        this.partyTypeForEntry = partyTypeForEntry;
+    }
+
+    public String getRcmApplicable() {
+        return rcmApplicable;
+    }
+
+    public void setRcmApplicable(String rcmApplicable) {
+        this.rcmApplicable = rcmApplicable;
+    }
+
+    public String getPlaceOfSupply() {
+        return placeOfSupply;
+    }
+
+    public void setPlaceOfSupply(String placeOfSupply) {
+        this.placeOfSupply = placeOfSupply;
+    }
+
+    public String getPlaceOfSupplycode() {
+        return placeOfSupplycode;
+    }
+
+    public void setPlaceOfSupplycode(String placeOfSupplycode) {
+        this.placeOfSupplycode = placeOfSupplycode;
+    }
+
+    public String getPartyType() {
+        return partyType;
+    }
+
+    public void setPartyType(String partyType) {
+        this.partyType = partyType;
+    }
+
+    public String getRoundOffAmount() {
+        return roundOffAmount;
+    }
+
+    public void setRoundOffAmount(String roundOffAmount) {
+        this.roundOffAmount = roundOffAmount;
+    }
+
+    public String getNetAmount() {
+        return netAmount;
+    }
+
+    public void setNetAmount(String netAmount) {
+        this.netAmount = netAmount;
+    }
+
+    public String getU_EntDt_LatestLine() {
+        return u_EntDt_LatestLine;
+    }
+
+    public void setU_EntDt_LatestLine(String u_EntDt_LatestLine) {
+        this.u_EntDt_LatestLine = u_EntDt_LatestLine;
+    }
+
+    public String getLineItemCodesCsv() {
+        return lineItemCodesCsv;
+    }
+
+    public void setLineItemCodesCsv(String lineItemCodesCsv) {
+        this.lineItemCodesCsv = lineItemCodesCsv;
+    }
+
+    public String getPoItemChangeCondition() {
+        return poItemChangeCondition;
+    }
+
+    public void setPoItemChangeCondition(String poItemChangeCondition) {
+        this.poItemChangeCondition = poItemChangeCondition;
+    }
+
+    public String getGrossAmount() {
+        return grossAmount;
+    }
+
+    public void setGrossAmount(String grossAmount) {
+        this.grossAmount = grossAmount;
+    }
+
+    public String getSupplierStateCode() {
+        return supplierStateCode;
+    }
+
+    public void setSupplierStateCode(String supplierStateCode) {
+        this.supplierStateCode = supplierStateCode;
+    }
+
+    public DefaultValue_Mdl getDefaultValueMdl() {
+        return defaultValueMdl;
+    }
+
+    public void setDefaultValueMdl(DefaultValue_Mdl defaultValueMdl) {
+        this.defaultValueMdl = defaultValueMdl;
+    }
+
+    public boolean getIsPurchaseOrderExists() {
+        return isPurchaseOrderExists;
+    }
+
+    public void setIsPurchaseOrderExists(boolean isPurchaseOrderExists) {
+        this.isPurchaseOrderExists = isPurchaseOrderExists;
+    }
+
+    public String getLastTransactionDate() {
+        return lastTransactionDate;
+    }
+
+    public void setLastTransactionDate(String lastTransactionDate) {
+        this.lastTransactionDate = lastTransactionDate;
+    }
+
+    public String getSiteCode() {
+        return siteCode;
+    }
+
+    public void setSiteCode(String siteCode) {
+        this.siteCode = siteCode;
+    }
+
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
+    public String getGoodsGrossAmt() {
+        return goodsGrossAmt;
+    }
+
+    public void setGoodsGrossAmt(String goodsGrossAmt) {
+        this.goodsGrossAmt = goodsGrossAmt;
+    }
+
+    public String getServiceGrossAmt() {
+        return serviceGrossAmt;
+    }
+
+    public void setServiceGrossAmt(String serviceGrossAmt) {
+        this.serviceGrossAmt = serviceGrossAmt;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+    public String getGoodsTaxableAmt() {
+        return goodsTaxableAmt;
+    }
+
+    public void setGoodsTaxableAmt(String goodsTaxableAmt) {
+        this.goodsTaxableAmt = goodsTaxableAmt;
+    }
+
+    public String getServiceTaxableAmt() {
+        return serviceTaxableAmt;
+    }
+
+    public void setServiceTaxableAmt(String serviceTaxableAmt) {
+        this.serviceTaxableAmt = serviceTaxableAmt;
+    }
+
+    public String getTaxableAmt() {
+        return taxableAmt;
+    }
+
+    public void setTaxableAmt(String taxableAmt) {
+        this.taxableAmt = taxableAmt;
+    }
+
+    public String getSgstUgst() {
+        return sgstUgst;
+    }
+
+    public void setSgstUgst(String sgstUgst) {
+        this.sgstUgst = sgstUgst;
+    }
+
+    public String getSgst() {
+        return sgst;
+    }
+
+    public void setSgst(String sgst) {
+        this.sgst = sgst;
+    }
+
+    public String getUgst() {
+        return ugst;
+    }
+
+    public void setUgst(String ugst) {
+        this.ugst = ugst;
+    }
+
+    public String getCgst() {
+        return cgst;
+    }
+
+    public void setCgst(String cgst) {
+        this.cgst = cgst;
+    }
+
+    public String getIgst() {
+        return igst;
+    }
+
+    public void setIgst(String igst) {
+        this.igst = igst;
+    }
+
+    public String getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(String subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public String getFinalDiscountPer() {
+        return finalDiscountPer;
+    }
+
+    public void setFinalDiscountPer(String finalDiscountPer) {
+        this.finalDiscountPer = finalDiscountPer;
+    }
+
+    public String getFinalDiscount() {
+        return finalDiscount;
+    }
+
+    public void setFinalDiscount(String finalDiscount) {
+        this.finalDiscount = finalDiscount;
+    }
+
+    public String getFinalDiscountAcCode() {
+        return finalDiscountAcCode;
+    }
+
+    public void setFinalDiscountAcCode(String finalDiscountAcCode) {
+        this.finalDiscountAcCode = finalDiscountAcCode;
+    }
+
+    public String getTotalAmt() {
+        return totalAmt;
+    }
+
+    public void setTotalAmt(String totalAmt) {
+        this.totalAmt = totalAmt;
+    }
+
+    public String getRoundOffAcCode() {
+        return roundOffAcCode;
+    }
+
+    public void setRoundOffAcCode(String roundOffAcCode) {
+        this.roundOffAcCode = roundOffAcCode;
+    }
+
+    public String getLandedValue() {
+        return landedValue;
+    }
+
+    public void setLandedValue(String landedValue) {
+        this.landedValue = landedValue;
+    }
+
+}

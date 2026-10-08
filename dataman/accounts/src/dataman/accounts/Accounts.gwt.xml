@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="dataman.dmToolkit.DmToolkit"/>
+    <inherits name="dataman.dmBase.DmBase"/>
+    <inherits name="dataman.accounts.AccountGroup"/>
+    <inherits name="dataman.accounts.AccountMaster"/>
+    <inherits name="dataman.accounts.AddressBook"/>
+    <inherits name="dataman.accounts.DefineCostCenter"/>
+    <inherits name="dataman.accounts.FundTransferEntry"/>
+    <inherits name="dataman.accounts.FundInTransitEntry"/>
+    <inherits name="dataman.accounts.AccountOpeningEntry"/>
+    <inherits name="dataman.accounts.BankReconciliationEntry"/>
+    <inherits name="dataman.accounts.EnviroSettings"/>
+    <inherits name="dataman.accounts.NationalityMaster"/>
+    <inherits name="dataman.accounts.DefineCostCenter"/>
+    <inherits name="dataman.accounts.CityMaster"/>
+    <inherits name="dataman.accounts.CountryMaster"/> 
+    <inherits name="dataman.accounts.CurrencyMaster"/>
+    <inherits name="dataman.accounts.TdsCategoryMaster"/>
+    <inherits name="dataman.accounts.VoucherEntry"/>
+    <inherits name="dataman.accounts.AcDisplaySetting"/>
+    <inherits name="dataman.accounts.AcGroupDetail"/>
+    <inherits name="dataman.accounts.AcLedgerDetail"/>
+    <inherits name="dataman.accounts.BalanceSheet"/>
+    <inherits name="dataman.accounts.ProfitLossDisplay"/>
+    <inherits name="dataman.accounts.TrialBalance"/>
+    <inherits name="dataman.accounts.DetailTrialBalance"/>
+    <inherits name="dataman.accounts.Reports"/>
+    <inherits name="dataman.accounts.VoucherEntryApproval"/>
+    <inherits name="dataman.accounts.StateMaster"/>
+    <inherits name="dataman.accounts.LedgerGroup"/>
+    <inherits name="dataman.accounts.ChequePrintSetup"/>
+    <inherits name="dataman.accounts.TdsCategoryDescriptionMaster"/>
+    <inherits name="dataman.accounts.BulkChequePrinting"/>
+    <inherits name="dataman.accounts.BankAccountDetail"/>
+    <inherits name="dataman.accounts.GstVoucherEntry"/>
+    <inherits name="dataman.accounts.VoucherAdjustmentEntry"/>
+    <inherits name="dataman.accounts.GstVoucherEntryApproval"/>
+    <inherits name="dataman.accounts.TallyExportMasters"/>
+    <inherits name="dataman.accounts.TallyExportVouchers"/>
+    <inherits name="dataman.accounts.TrialBalanceCompare"/>
+    <inherits name="dataman.accounts.AcDisplaySettingComparison"/>
+    <inherits name="dataman.accounts.AcGroupDetailCompare"/>
+    <inherits name="dataman.accounts.ProfitLossDisplayCompare"/>
+    <inherits name="dataman.accounts.BalanceSheetCompare"/>
+    <inherits name="dataman.accounts.VoucherEntryPaymentJV"/>
+    <inherits name="dataman.accounts.AdvanceRequestEntry"/>
+    <inherits name="dataman.accounts.AdvanceEntry"/>
+    <inherits name="dataman.accounts.FinalPaymentRequestEntry"/>
+    <inherits name="dataman.accounts.FinalPaymentEntry"/>
+    
+    <inherits name="dataman.accounts.BillHandle"/>
+    <inherits name="dataman.accounts.BillHandleApproval"/>
+    <inherits name="dataman.accounts.LocationMaster"/> 
+    
+    <inherits name="dataman.accounts.BudgetAllocationEntry"/> 
+    <inherits name="dataman.accounts.BudgetDisbursement"/> 
+    <inherits name="dataman.accounts.BudgetHeadMaster"/> 
+    <inherits name="dataman.accounts.BankLetterCreation"/> 
+    <inherits name="dataman.accounts.BankLetterApproval"/> 
+    <inherits name="dataman.accounts.AdditionalPlaceOfBusiness"/>   
+   <inherits name="dataman.accounts.FinancialBookClose"/> 
+   <inherits name="dataman.accounts.WholesaleBillSettlement"/> 
+   
+
+    <source path = "self/client"/>
+    <source path = "self/shared"/>
+</module>

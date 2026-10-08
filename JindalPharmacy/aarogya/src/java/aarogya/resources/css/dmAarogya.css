@@ -1,0 +1,504 @@
+
+.consultant-dairy-box-waiting {
+    background: #586CC3; /* Old browsers */    
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);  
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative; 
+}
+.consultant-dairy-box-confirm {
+    background: #62A04B; /* Old browsers */
+
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);  
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative;
+
+}
+.consultant-dairy-box-cancel {
+    background: #D83D4B; /* Old browsers */
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);  
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative; 
+}
+.consultant-dairy-box-attended {
+    background: #C85098; /* Old browsers */ 
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);  
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative;
+
+}
+
+.consultant-dairy-box-postpone {
+    background: #0094C1; /* Old browsers */
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);  
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative;   
+}
+
+.consultant-dairy-box-blank {   
+    background: rgb(201, 221, 231); /* Old browsers */
+    background: -moz-linear-gradient(to bottom, rgb(201, 221, 231) 5%, rgb(200, 220, 230) 100%) repeat scroll 0% 0% rgb(201, 221, 231); /* FF3.6-15 */
+    background: -webkit-linear-gradient(to bottom, rgb(201, 221, 231) 5%, rgb(200, 220, 230) 100%) repeat scroll 0% 0% rgb(201, 221, 231); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgb(201, 221, 231) 5%, rgb(200, 220, 230) 100%) repeat scroll 0% 0% rgb(201, 221, 231);
+
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 40px; 
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);  
+    text-align: center;
+    float: left;
+    position: relative; 
+}
+
+.consultant-dairy-box-blankTime {
+    background: gray; /* Old browsers */
+    /*    background: -moz-linear-gradient(top, #cedce7 0%, #596a72 81%);  FF3.6-15 
+        background: -webkit-linear-gradient(top, #cedce7 0%,#596a72 81%);  Chrome10-25,Safari5.1-6 
+        background: linear-gradient(to bottom, #cedce7 0%,#596a72 81%);  W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+  display: inline-block;*/
+
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);   
+    text-align: center; 
+    position: relative;
+    width:4%;
+    height:40px;
+    float:left;
+}
+
+.consultant-dairy-box-Time {
+    background: rgb(76, 158, 217); /* Old browsers */
+    /*    background: -moz-linear-gradient(to bottom, rgb(96, 151, 130) 5%, rgb(96, 151, 130) 100%) repeat scroll 0% 0% rgb(96, 151, 130);  FF3.6-15 
+        background: -webkit-linear-gradient(to bottom, rgb(96, 151, 130) 5%, rgb(96, 151, 130) 100%) repeat scroll 0% 0% rgb(96, 151, 130);  Chrome10-25,Safari5.1-6 
+        background: linear-gradient(to bottom, rgb(96, 151, 130) 5%, rgb(96, 151, 130) 100%) repeat scroll 0% 0% rgb(96, 151, 130);*/
+
+
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);   
+    text-align: center; 
+    position: relative;
+    width:4%;
+    height:40px;
+    float:left;
+}
+
+.consultant-dairy-box-Count {
+    background: rgb(83, 196, 117); /* Old browsers */
+    background: -moz-linear-gradient(to bottom, rgb(83, 196, 117) 5%, rgb(83, 196, 117) 100%) repeat scroll 0% 0% rgb(83, 196, 117); /* FF3.6-15 */
+    background: -webkit-linear-gradient(to bottom, rgb(83, 196, 117) 5%, rgb(83, 196, 117) 100%) repeat scroll 0% 0% rgb(83, 196, 117); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgb(83, 196, 117) 5%, rgb(83, 196, 117) 100%) repeat scroll 0% 0% rgb(83, 196, 117);  
+
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);   
+    text-align: center; 
+    position: relative;
+    width:3%;
+    height:40px;
+    float:left;
+}
+
+.room-dairy-box-dirty {
+    background: #D83D4B; /* Old browsers */
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative; 
+}
+.room-dairy-box-occupied {
+    background: #586CC3;
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative; 
+}
+
+.room-dairy-box-clean {
+    background: #62A04B; /* Old browsers */
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative;
+
+}
+.room-dairy-box-booked {
+    background: Green; /* Old browsers */
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative;
+
+}
+
+.OT-dairy-box-Time {
+    background: gray;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);   
+    text-align: center; 
+    position: relative;
+    width:4%;
+    height:40px;
+    float:left;
+}
+.OT-dairy-box-OTRoom {
+    background: rgb(76, 158, 217); 
+    display: inline-block;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);   
+    text-align: center; 
+    position: relative;
+    width:4%;
+    height:40px;
+    float:left;
+}
+.OT-dairy-box-confirm {
+    background: #62A04B; 
+    display: inline-block;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-family: arial;
+    font-size: 9pt;   
+    text-decoration: none;
+    text-shadow: 0px 1px 0px rgb(0, 91, 183);  
+    height: 40px;
+    text-align: center;
+    float: left;   
+    position: relative;
+}
+
+.favorite-container{
+    background: white;
+    width: 100%;
+    overflow-x: hidden;
+    column-width: 190px;
+    -webkit-column-width: 190px;
+    -moz-column-width: 190px;
+}
+
+.favorite-container div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.favorite-container > div {
+    position: relative;
+    display: inline-block;
+    width: inherit;
+}
+
+.favorite-list{
+    margin-left: 37px;
+    list-style-type: none;
+    color: rgb(0, 102, 255);
+    cursor: pointer;
+    font-size: 12px;
+    margin-bottom: 3px;
+}
+
+.favorite-list:hover{
+    font-weight: bold;
+    background-color: lightgrey;
+}
+
+.favorite-module img {
+    width: 20px;
+    height: 20px;
+    margin-right: 7px;
+    position: relative;
+    top: 4px;
+}
+.favorite-module span {
+    position: relative;
+    top: -2px;
+    border-top: 2px solid;
+    border-bottom: 1px solid;
+}
+.favorite-module{
+    margin-left: 5px;
+    font-weight: bold;
+    color: rgb(60, 60, 60);
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.cpoeOPD-Genearal {
+    background-color: rgb(168, 230, 207) !important;
+}
+
+.cpoeOPD-Emergency {
+    background-color: rgb(255, 170, 165) !important;
+}
+
+.cpoeOPD-Appointment {
+    background-color: rgb(255, 211, 182) !important;
+}
+
+.cpoeOPD-Reports {
+    background-color: rgb(124, 205, 255) !important;
+}
+
+.cpoeOPD-Skipped {
+    background-color: rgb(206, 183, 251) !important;
+}
+
+.cpoeOPD-GenearalBorder {
+    border-left: 10px solid rgb(168, 230, 207) !important;
+    border-right: 10px solid rgb(168, 230, 207) !important;
+}
+
+.cpoeOPD-EmergencyBorder {
+    border-left: 10px solid rgb(255, 170, 165) !important;
+    border-right: 10px solid rgb(255, 170, 165) !important;
+}
+
+.cpoeOPD-AppointmentBorder {
+    border-left: 10px solid rgb(255, 211, 182) !important;
+    border-right: 10px solid rgb(255, 211, 182) !important;
+}
+
+.cpoeOPD-ReportsBorder {
+    border-left: 10px solid rgb(124, 205, 255) !important;
+    border-right: 10px solid rgb(124, 205, 255) !important;
+}
+
+.cpoeOPD-SkippedBorder {
+    border-left: 10px solid rgb(206, 183, 251) !important;
+    border-right: 10px solid rgb(206, 183, 251) !important;
+}
+
+.cpoeOPD-StripLabel
+{
+    width: 100%;
+    height: 22px;
+    float: left;
+    background-color: #555;
+    color: #fff;
+    padding-left: 5px;
+    font-family: arial;
+    font-size: 12px;
+    line-height: 10px;
+}
+.cpoeOPD-TokenPatient
+{
+    width: auto !important;
+    height: 16px !important;
+    font-size: 10pt !important;
+    margin-top: 0px !important;
+    background-color: rgb(255, 255, 255) !important;
+    color: rgb(0, 0, 0) !important;
+    padding: 6px 10px !important;
+    font-weight: bold !important;
+    display :inline-block !important;
+}
+
+.dashboard-menu-link{
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    padding: 2px 4px;
+    display: block;
+    border-radius: 4px 4px 4px 4px;
+    background-color: rgb(81, 99, 149);
+    border: 1px solid rgb(81, 99, 149);
+}
+
+.dashboard-menu-link:hover {
+    text-decoration: none;
+    color:rgb(81, 99, 149);
+    background-color: rgb(255, 255, 255);
+}
+
+.dashBoard-box{
+    box-shadow: 0 4px 7px rgba(0,0,0,0.4);
+    display: block;
+    background: #fff;
+    width: 100%;
+    border-radius: 2px;
+}
+
+.dashBoard-top{
+    color: white;
+    font-weight: bold;
+    padding: 7px 0px;
+}
+
+.dashBoard-count{
+    font-size: 20px;
+    font-weight: bold;
+    width: 100% !important;
+    text-align: center;
+    padding: 18px 0px;
+    background-color: white;
+}
+
+.dashBoard-top .gwt-Label{
+    max-width: 80% !important;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.dashBoard-cardStyle{
+    float: left;
+    margin: 5px 0px 0px 5px;
+}
+
+.dashBoard-card-expand{
+    width: 375px;
+    height: 200px;
+}
+.dashBoard-card-expandLarg{
+    width: 1100px;
+    height: 617px;
+}
+
+.dashBoard-card-collapse{
+    width: 185px;
+    height: 96px;
+}
+
+.blink{
+    animation: blinker 1.0s linear infinite;
+    color: blue;
+    font-size: 14px;
+    font-weight: bold;
+}
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+.hindiFont{
+    font-family: "Kruti Dev 010" !important;
+    font-size: 19px;
+}
+
+.NDSColor{
+    background-color: rgb(165,194,239) !important;
+}
+.dm-Grid-row-blue{
+    background-color: #91cdff !important;
+
+}
+.dm-blink-style{
+    animation: texBlinker 3.0s linear infinite;
+    background-color: red;
+    color: white;
+    font-weight: 900;
+    letter-spacing: 5px;
+    padding: 3px 10px;
+}
+
+dmHyperLink {
+    text-decoration: underline;
+    cursor: pointer;
+
+}
+
+
+@keyframes texBlinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes texBlinker {
+    50% {
+        opacity: 0;
+    }
+}
+@-moz-keyframes texBlinker {
+    50% {
+        opacity: 0;
+    }
+}
+@-o-keyframes texBlinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+

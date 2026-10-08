@@ -1,0 +1,17 @@
+package aarogya.mis.standardReports.shared;
+
+import dataman.dmBase.self.shared.*;
+import dataman.dmToolkit.dmStatic.shared.DmShared;
+import java.util.LinkedHashMap;
+
+public class RptOpdDiscountReport_Vld {
+
+    public static void validateInput(LinkedHashMap<String, FieldUDT_Mdl> hasMapFilter) {
+        DmShared.isValidText(DmShared.dNull(hasMapFilter.get("fromDate").getText()), "From Date", 100);
+        DmShared.isValidText(DmShared.dNull(hasMapFilter.get("toDate").getText()), "To Date", 100);
+
+        if (DmShared.convertDate(hasMapFilter.get("fromDate").getText()).getTime() > DmShared.convertDate(hasMapFilter.get("toDate").getText()).getTime()) {
+            throw new DmException(100, "From Date should be less than or equal to To Date.");
+        }
+    }
+}

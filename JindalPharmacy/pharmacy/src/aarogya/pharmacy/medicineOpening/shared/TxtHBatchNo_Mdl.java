@@ -1,0 +1,67 @@
+package aarogya.pharmacy.medicineOpening.shared;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
+import dataman.dmBase.self.shared.*;
+import java.io.Serializable;
+
+public class TxtHBatchNo_Mdl extends KeyField implements Serializable, IsSerializable {
+
+    private String mrp;
+    private String expireDate;
+    private String mfgDate;
+    private String bestBeforeDays;
+    private String saleRate;
+    private String barcode;
+
+    public TxtHBatchNo_Mdl() {
+    }
+
+    public String getMrp() {
+        return mrp;
+    }
+
+    public void setMrp(String mrp) {
+        this.mrp = mrp;
+    }
+
+    public String getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(String expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public String getMfgDate() {
+        return mfgDate;
+    }
+
+    public void setMfgDate(String mfgDate) {
+        this.mfgDate = mfgDate;
+    }
+
+    public String getBestBeforeDays() {
+        return bestBeforeDays;
+    }
+
+    public void setBestBeforeDays(String bestBeforeDays) {
+        this.bestBeforeDays = bestBeforeDays;
+    }
+
+    public String getSaleRate() {
+        return saleRate;
+    }
+
+    public void setSaleRate(String saleRate) {
+        this.saleRate = saleRate;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+}

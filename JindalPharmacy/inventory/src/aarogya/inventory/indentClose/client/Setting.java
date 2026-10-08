@@ -1,0 +1,334 @@
+package aarogya.inventory.indentClose.client;
+
+import aarogya.inventory.indentClose.shared.IndentClose_Mdl;
+import aarogya.inventory.indentClose.shared.TxtHIndentNo_Mdl;
+import aarogya.selfToolkit.stStatic.client.STClient;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
+import com.sencha.gxt.widget.core.client.event.BlurEvent;
+import dataman.dmToolkit.dmMessageBox.client.DmAlertMessageBox;
+import dataman.dmToolkit.dmStatic.client.DmClient;
+import dataman.dmBase.dmBaseStatic.client.DmRootEvent;
+import dataman.dmBase.dmBaseStatic.client.DmRootEvents;
+import dataman.dmToolkit.dmStatic.shared.DmShared;
+import dataman.dmToolkit.dmTextHelpMulti.client.DmTextHelpMulti;
+import dataman.dmBase.self.shared.*;
+import dataman.dmToolkit.self.shared.*;
+import java.util.List;
+import dataman.dmToolkit.dmTextHelp.client.DmTextHelp;
+import java.util.Date;
+import aarogya.inventory.indentClose.shared.IndentClose_SrvAsync;
+import aarogya.inventory.indentClose.shared.IndentClose_Srv;
+
+public class Setting<T1, T2> extends Setting_Dsg implements IsWidget, AttachEvent.Handler, DmRootEvents, ClickHandler, BlurHandler {
+
+    interface IdentApprovalEntryCallBack {
+
+        public void onOk(IndentClose_Mdl approvalEntry_Mdl);
+    }
+
+    IdentApprovalEntryCallBack identApprovalEntryCallBack;
+    ServiceInvoker<IndentClose_SrvAsync> SrvAsync;
+
+    public void addIdentApprovalEntryCallBackCallBack(IdentApprovalEntryCallBack identApprovalEntryCallBack) {
+        this.identApprovalEntryCallBack = identApprovalEntryCallBack;
+    }
+
+    public void show(boolean editable) {
+        popupPanel.show();
+        popupPanel.center();
+        popupPanel.setGlassEnabled(true);
+        txtFromDate.setFocus(true);
+        flwOk.clear();
+        flwOk.setVisible(false);
+
+        if (editable) {
+            flwOk.add(btnOk);
+            flwOk.setVisible(true);
+        }
+    }
+
+    public void hide() {
+        this.popupPanel.hide();
+    }
+
+    private void txtKeyEvents() {
+
+        txtFromDate.addValueChangeHandler(new ValueChangeHandler<String>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                txtFromDate.setText(DmClient.returnDate(txtFromDate.getText()));
+            }
+        });
+
+        txtToDate.addValueChangeHandler(new ValueChangeHandler<String>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                txtToDate.setText(DmClient.returnDate(txtToDate.getText()));
+            }
+        });
+
+    }
+
+    private void textHelpEvents() {
+        txtHIndenter.addTextHelpMultiCallBack(new DmTextHelpMulti.TextHelpMultiCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                SrvAsync.invokeRPC(blnCallBackWait).getTxtHIndenter(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<KeyFieldExtended>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHIndenter).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<KeyFieldExtended>> result) {
+                        if (result.isStatus()) {
+                            txtHIndenter.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHIndenter).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelection(boolean blnStatus, String keyCode, String keyName) {
+                if (blnStatus) {
+
+                }
+            }
+        });
+
+        txtHStatus.addTextHelpCallBack(new DmTextHelp.TextHelpCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                SrvAsync.invokeRPC(blnCallBackWait).getTxtHStatus(DmShared.iNull(txtBeforeDays.getText()).toString(), helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<KeyFieldExtended>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHStatus).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<KeyFieldExtended>> result) {
+                        if (result.isStatus()) {
+                            txtHStatus.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHStatus).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelectedRow(boolean blnStatus, KeyFieldExtended tRow) {
+            }
+        });
+
+        txtHDepartment.addTextHelpMultiCallBack(new DmTextHelpMulti.TextHelpMultiCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                SrvAsync.invokeRPC(blnCallBackWait).getTxtHDepartment(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<KeyFieldExtended>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHDepartment).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<KeyFieldExtended>> result) {
+                        if (result.isStatus()) {
+                            txtHDepartment.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHDepartment).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelection(boolean blnStatus, String keyCode, String keyName) {
+                if (blnStatus) {
+
+                }
+            }
+        });
+
+        txtHItemName.addTextHelpMultiCallBack(new DmTextHelpMulti.TextHelpMultiCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                SrvAsync.invokeRPC(blnCallBackWait).getTxtHItem(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<KeyFieldExtended>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHItemName).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<KeyFieldExtended>> result) {
+                        if (result.isStatus()) {
+                            txtHItemName.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHItemName).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelection(boolean blnStatus, String keyCode, String keyName) {
+                if (blnStatus) {
+
+                }
+            }
+        });
+
+        txtHIndentNo.addTextHelpMultiCallBack(new DmTextHelpMulti.TextHelpMultiCallBack<KeyFieldExtended>() {
+
+            @Override
+            public void populateData(DmHelper helper, boolean blnToEndOfFile, boolean blnCallBackWait) {
+                SrvAsync.invokeRPC(blnCallBackWait).getTxtHIndentNo(helper, blnToEndOfFile, new AsyncCallback<DmResultPageing<List<TxtHIndentNo_Mdl>>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        new DmAlertMessageBox(caught.getMessage(), txtHIndentNo).show();
+                    }
+
+                    @Override
+                    public void onSuccess(DmResultPageing<List<TxtHIndentNo_Mdl>> result) {
+                        if (result.isStatus()) {
+                            txtHIndentNo.setData(result.getData(), result.getPaging());
+                        } else {
+                            new DmAlertMessageBox(result.getErrorMessage(), txtHIndentNo).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void getSelection(boolean blnStatus, String keyCode, String keyName) {
+                if (blnStatus) {
+
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onClick(ClickEvent event) {
+
+        if (event.getSource() == btnCancel) {
+            popupPanel.hide();
+        } else if (event.getSource() == btnOk) {
+
+            if (!DmShared.xNull(txtFromDate.getText()).equalsIgnoreCase("") && !DmShared.xNull(txtToDate.getText()).equalsIgnoreCase("")) {
+                if ((DmShared.convertDate(txtToDate.getText()).getTime() < (DmShared.convertDate(txtFromDate.getText())).getTime())) {
+                    new DmAlertMessageBox("From Date should be less than or equal to To Date.", txtFromDate).show();
+                    return;
+                }
+            }
+            fillRecords();
+
+        }
+    }
+
+    private void fillRecords() {
+        IndentClose_Mdl mrTemp = new IndentClose_Mdl();
+        mrTemp.setFromDate(DmShared.xNull(txtFromDate.getText()));
+        mrTemp.setToDate(DmShared.xNull(txtToDate.getText()));
+        mrTemp.setDepartmentCode(DmShared.xNull(txtHDepartment.getTag()));
+        mrTemp.setDepartmentName(DmShared.xNull(txtHDepartment.getText()));
+        mrTemp.setSharedKeyFieldCode(DmShared.xNull(txtHDepartment.getTag()));
+        mrTemp.setItemCode(DmShared.xNull(txtHItemName.getTag()));
+        mrTemp.setItemName(DmShared.xNull(txtHItemName.getText()));
+        mrTemp.setStatusCode(DmShared.xNull(txtHStatus.getTag()));
+        mrTemp.setStatusName(DmShared.xNull(txtHStatus.getText()));
+        mrTemp.setIndenterCode(DmShared.xNull(txtHIndenter.getTag()));
+        mrTemp.setIndenterName(DmShared.xNull(txtHIndenter.getText()));
+        mrTemp.setIndenterName(DmShared.xNull(txtFromDate.getText()));
+        mrTemp.setIndentDocIds(DmShared.xNull(txtHIndentNo.getTag()));
+        mrTemp.setIndentRecIds(DmShared.xNull(txtHIndentNo.getText()));
+        mrTemp.setBeforeDay(DmShared.xNull(txtBeforeDays.getText()));
+
+        identApprovalEntryCallBack.onOk(mrTemp);
+        popupPanel.hide();
+    }
+
+    @Override
+    public Widget asWidget() {
+        return this.popupPanel;
+    }
+
+    @Override
+    public void rootKeyInvoked(DmRootEvent rootEvent) {
+        rootEvent.stopPropagation();
+        if (rootEvent.getEvent().getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE) {
+            this.hide();
+        }
+    }
+
+    @Override
+    public void onAttachOrDetach(AttachEvent event) {
+        if (event.isAttached()) {
+            DmClient.addRootKeyEvent(this, Event.ONKEYDOWN);
+        } else {
+            DmClient.removeRootKeyEvent(this, Event.ONKEYDOWN);
+        }
+    }
+
+    public Setting() {
+        super();
+        SrvAsync = new ServiceInvoker<IndentClose_SrvAsync>(GWT.create(IndentClose_Srv.class), IndentClose.class.getName());
+        textHelpEvents();
+        txtKeyEvents();
+        popupPanel.addAttachHandler(this);
+        toolContainer.setTitle("Setting");
+        toolContainer.addWidget(flwOk);
+        toolContainer.addWidget(flwCancel);
+        toolContainer.addGap();
+
+        btnCancel.addClickHandler(this);
+        btnOk.addClickHandler(this);
+        onAdd();
+    }
+
+    private void onAdd() {
+        txtToDate.setText(DmClient.getLoginDate());
+        if (DmShared.xNull(txtHStatus.getTag()).equalsIgnoreCase("")) {
+            txtHStatus.setTag("P");
+            txtHStatus.setText("Pending");
+        }
+    }
+
+    @Override
+    public void onBlur(com.google.gwt.event.dom.client.BlurEvent event) {
+//        if (event.getSource() == txtBeforeDays) {
+//            if (!DmShared.xNull(txtBeforeDays.getText()).equalsIgnoreCase("")) {
+//                Date tempDate = DmShared.convertDate(DmShared.dNull(txtMfgDate.getText()));
+//                CalendarUtil.addDaysToDate(tempDate, DmShared.iNull(txtBestBefore.getText()).intValue());
+//                txtHStatus.setText(DmShared.xNull(tempDate));
+//            } else {
+//                txtExpDate.setText("");
+//            }
+//        }
+    }
+
+}

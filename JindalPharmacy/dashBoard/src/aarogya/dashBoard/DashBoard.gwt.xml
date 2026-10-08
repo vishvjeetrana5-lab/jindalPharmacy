@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="dataman.dmToolkit.DmToolkit"/>
+    <inherits name="dataman.dmBase.DmBase"/>
+    <inherits name="aarogya.selfToolkit.SelfToolkit"/>
+    
+    <inherits name="aarogya.dashBoard.Home"/>
+    <inherits name="aarogya.dashBoard.DashBoardCard"/>
+    <inherits name="aarogya.dashBoard.Favorite"/>
+    <inherits name="aarogya.dashBoard.RequisitionInventory"/>
+    <inherits name="aarogya.dashBoard.RequisitionPharmacy"/>
+    <inherits name="aarogya.dashBoard.WalkThrough"/>
+    <inherits name="aarogya.dashBoard.CovidDashboard"/>
+    <inherits name="aarogya.dashBoard.DataModificationLog"/>
+    <inherits name="aarogya.dashBoard.InventoryPendingPO"/>
+    <inherits name="aarogya.dashBoard.InventoryPendingIndent"/>
+    <inherits name="aarogya.dashBoard.InventoryIndentPendingForApproval"/>
+    <inherits name="aarogya.dashBoard.NearExpiryMedicine"/>
+    <inherits name="aarogya.dashBoard.MedicineStockOut"/>
+    <inherits name="aarogya.dashBoard.NonSoldMedicine"/>
+    <inherits name="aarogya.dashBoard.FastMovingMedicine"/>
+    <inherits name="aarogya.dashBoard.AdvancesPendingForBillSettlement"/>
+    <inherits name="aarogya.dashBoard.BillDueNotPaid"/>
+    <inherits name="aarogya.dashBoard.BillPendingForApproval"/>
+    <inherits name="aarogya.dashBoard.BillPendingForGRN"/>
+    <inherits name="aarogya.dashBoard.TotalCashCollection"/>
+    <inherits name="aarogya.dashBoard.TotalRefundForDate"/>
+    <inherits name="aarogya.dashBoard.WHCollectionDashBoard"/>
+    
+        
+    <source path = "self/client"/>
+    <source path = "self/shared"/>
+</module>
